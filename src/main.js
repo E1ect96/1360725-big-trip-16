@@ -25,7 +25,7 @@ renderTemplate(siteTripInfo, createTripInfoTemplate(), RenderPosition.AFTERBEGIN
 renderTemplate(siteTripEvents, createSiteSortingTepmlate(), RenderPosition.AFTERBEGIN);
 
 for (let i = 0; i < POINT_COUNT; i++) {
-  renderTemplate(siteTripEvents, createTripPointTemplate(), RenderPosition.BEFOREEND);
+  renderTemplate(siteTripList, createTripPointTemplate(), RenderPosition.BEFOREEND);
 }
 
 renderTemplate(siteTripList, createPointAddFormTemplate(), RenderPosition.BEFOREEND);
