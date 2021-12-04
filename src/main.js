@@ -6,6 +6,7 @@ import {createSiteSortingTepmlate} from './view/site-sorting-view.js';
 import {createPointAddFormTemplate} from './view/point-add-form-view.js';
 import {createPointEditFormTemplate} from './view/point-edit-form-view.js';
 import {createTripPointTemplate} from './view/trip-point-view.js';
+import {generateTripPoint} from './mock/trip-point.js';
 
 const POINT_COUNT = 3;
 
@@ -31,3 +32,4 @@ for (let i = 0; i < POINT_COUNT; i++) {
 renderTemplate(siteTripList, createPointAddFormTemplate());
 renderTemplate(siteTripList, createPointEditFormTemplate(), RenderPosition.AFTERBEGIN);
 
+generateTripPoint();

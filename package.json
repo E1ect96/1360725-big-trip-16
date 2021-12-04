@@ -26,6 +26,7 @@
     "node": "16"
   },
   "dependencies": {
-    "@babel/core": "7.16.0"
+    "@babel/core": "7.16.0",
+    "dayjs": "1.10.7"
   }
 }
