@@ -19,15 +19,15 @@ const siteTripList = document.createElement('ul');
 siteTripList.classList.add('trip-events__list');
 siteTripEvents.appendChild(siteTripList);
 
-renderTemplate(siteMenuElement, createSiteMenuTemplate(), RenderPosition.BEFOREEND);
-renderTemplate(siteFilterElement, createFilterTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(siteMenuElement, createSiteMenuTemplate());
+renderTemplate(siteFilterElement, createFilterTemplate());
 renderTemplate(siteTripInfo, createTripInfoTemplate(), RenderPosition.AFTERBEGIN);
 renderTemplate(siteTripEvents, createSiteSortingTepmlate(), RenderPosition.AFTERBEGIN);
 
 for (let i = 0; i < POINT_COUNT; i++) {
-  renderTemplate(siteTripList, createTripPointTemplate(), RenderPosition.BEFOREEND);
+  renderTemplate(siteTripList, createTripPointTemplate());
 }
 
-renderTemplate(siteTripList, createPointAddFormTemplate(), RenderPosition.BEFOREEND);
+renderTemplate(siteTripList, createPointAddFormTemplate());
 renderTemplate(siteTripList, createPointEditFormTemplate(), RenderPosition.AFTERBEGIN);
 
