@@ -1,10 +1,7 @@
-import dayjs from 'dayjs';
+import {tripFullDate} from '../utils';
 
 export const createPointEditFormTemplate = (tripPoint) => {
   const {type, time, price, destinationInfo} = tripPoint;
-
-  const startDate = dayjs(time.start).format('DD/MM/YY HH:MM');
-  const endDate = dayjs(time.end).format('DD/MM/YY HH:MM');
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -86,10 +83,10 @@ export const createPointEditFormTemplate = (tripPoint) => {
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startDate}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${tripFullDate(time.start)}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endDate}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${tripFullDate(time.end)}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
