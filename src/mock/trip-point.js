@@ -69,7 +69,7 @@ const generateRandomDate = () => {
   const maxDaysGap = 7;
   const daysGap = getRandomInteger(1, maxDaysGap);
   const startDate = dayjs().add(daysGap, 'day').add(getRandomInteger(0, 23), 'hour').add(getRandomInteger(0,59), 'minute');
-  const endDate = startDate.add(getRandomInteger(0, 23), 'hour').add(getRandomInteger(0,59), 'minute');
+  const endDate = startDate.add(getRandomInteger(0, 12), 'hour');
   return {
     start: startDate.toDate(),
     end: endDate.toDate(),
@@ -101,7 +101,7 @@ export const generateTripPoint = () => ({
   type: generateRandomType(),
   time: generateRandomDate(),
   price: generateRandomPrice(),
-  additionalOptions: generateAdditionalOptions(getRandomInteger(0, 5)),
+  additionalOptions: generateAdditionalOptions(getRandomInteger(1, 5)),
   destinationInfo: {
     description: generateRandomDescription(),
     name: generateRandomDestination(),

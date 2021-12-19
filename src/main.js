@@ -32,6 +32,6 @@ for (let i = 0; i < POINT_COUNT; i++) {
 }
 
 renderTemplate(siteTripList, createPointAddFormTemplate());
-renderTemplate(siteTripList, createPointEditFormTemplate(), RenderPosition.AFTERBEGIN);
+renderTemplate(siteTripList, createPointEditFormTemplate(tripPoints[0]), RenderPosition.AFTERBEGIN);
 
 generateTripPoint();
