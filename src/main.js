@@ -8,7 +8,7 @@ import {createPointEditFormTemplate} from './view/point-edit-form-view.js';
 import {createTripPointTemplate} from './view/trip-point-view.js';
 import {generateTripPoint} from './mock/trip-point.js';
 
-const POINT_COUNT = 20;
+const POINT_COUNT = 6;
 
 const tripPoints = Array.from({length: POINT_COUNT}, generateTripPoint);
 
@@ -27,11 +27,11 @@ renderTemplate(siteFilterElement, createFilterTemplate());
 renderTemplate(siteTripInfo, createTripInfoTemplate(), RenderPosition.AFTERBEGIN);
 renderTemplate(siteTripEvents, createSiteSortingTepmlate(), RenderPosition.AFTERBEGIN);
 
-for (let i = 0; i < POINT_COUNT; i++) {
+for (let i = 1; i < POINT_COUNT - 1; i++) {
   renderTemplate(siteTripList, createTripPointTemplate(tripPoints[i]));
 }
 
-renderTemplate(siteTripList, createPointAddFormTemplate());
+renderTemplate(siteTripList, createPointAddFormTemplate(tripPoints[tripPoints.length-1]));
 renderTemplate(siteTripList, createPointEditFormTemplate(tripPoints[0]), RenderPosition.AFTERBEGIN);
 
 generateTripPoint();
