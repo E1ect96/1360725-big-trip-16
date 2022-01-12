@@ -7,10 +7,9 @@ import {createPointAddFormTemplate} from './view/point-add-form-view.js';
 import {createPointEditFormTemplate} from './view/point-edit-form-view.js';
 import {createTripPointTemplate} from './view/trip-point-view.js';
 import {generateTripPoint} from './mock/trip-point.js';
+import {tripPoints} from './utils.js';
 
 const POINT_COUNT = 6;
-
-const tripPoints = Array.from({length: POINT_COUNT}, generateTripPoint);
 
 const siteBodyElement = document.querySelector('.page-body');
 const siteMenuElement = siteBodyElement.querySelector('.trip-controls__navigation');
