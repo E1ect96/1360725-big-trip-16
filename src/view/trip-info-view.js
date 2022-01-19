@@ -1,4 +1,5 @@
-import {tripPoints, calculateTotalCost} from '../utils';
+import {calculateTotalCost} from '../utils';
+import {tripPoints} from '../main';
 
 export const createTripInfoTemplate = () => (
   `<section class="trip-main__trip-info  trip-info">
