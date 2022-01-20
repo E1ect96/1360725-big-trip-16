@@ -1,6 +1,7 @@
 import {tripFullDate} from '../utils';
+import {createElement} from '../render';
 
-export const createPointEditFormTemplate = (tripPoint) => {
+const createPointEditFormTemplate = (tripPoint) => {
   const {type, time, price, destinationInfo} = tripPoint;
 
   return `<li class="trip-events__item">
@@ -163,3 +164,27 @@ export const createPointEditFormTemplate = (tripPoint) => {
     </form>
   </li>`;
 };
+
+export default class PointEditFormView {
+  #element = null;
+  #tripPoint = null;
+
+  constructor(tripPoint) {
+    this.#tripPoint = tripPoint;
+  }
+
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
+    }
+    return this.#element;
+  }
+
+  get template() {
+    return createPointEditFormTemplate(this.#tripPoint);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

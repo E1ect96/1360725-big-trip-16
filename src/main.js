@@ -1,10 +1,10 @@
-import {renderTemplate, RenderPosition, renderElement} from './render.js';
+import {RenderPosition, renderElement} from './render.js';
 import SiteMenuView from './view/site-menu-view.js';
 import FilterView from './view/filter-view.js';
 import TripInfoView from './view/trip-info-view.js';
 import SiteSortingView from './view/site-sorting-view.js';
-import {createPointAddFormTemplate} from './view/point-add-form-view.js';
-import {createPointEditFormTemplate} from './view/point-edit-form-view.js';
+import PointAddFormView from './view/point-add-form-view.js';
+import PointEditFormView from './view/point-edit-form-view.js';
 import TripPointView from './view/trip-point-view.js';
 import {generateTripPoint} from './mock/trip-point.js';
 
@@ -27,9 +27,9 @@ renderElement(siteFilterElement, new FilterView().element, RenderPosition.BEFORE
 renderElement(siteTripInfo, new TripInfoView().element, RenderPosition.AFTERBEGIN);
 renderElement(siteTripEvents, new SiteSortingView().element, RenderPosition.AFTERBEGIN);
 
-for (let i = 1; i < POINT_COUNT - 1; i++) {
+for (let i = 0; i < POINT_COUNT; i++) {
   renderElement(siteTripList, new TripPointView(tripPoints[i]).element, RenderPosition.BEFOREEND);
 }
 
-renderTemplate(siteTripList, createPointAddFormTemplate(tripPoints[tripPoints.length-1]));
-renderTemplate(siteTripList, createPointEditFormTemplate(tripPoints[0]), RenderPosition.AFTERBEGIN);
+renderElement(siteTripList, new PointAddFormView(tripPoints[tripPoints.length-1]).element, RenderPosition.BEFOREEND);
+renderElement(siteTripList, new PointEditFormView(tripPoints[0]).element, RenderPosition.AFTERBEGIN);
