@@ -48,19 +48,15 @@ const renderTripPoint = (TripListElement, tripPoint) => {
     replaceFormToCard();
   });
 
-  render(TripListElement, tripPointComponent.element, RenderPosition.BEFOREEND);
+  render(TripListElement, tripPointComponent.element);
 };
 
-render(siteMenuElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
-render(siteFilterElement, new FilterView().element, RenderPosition.BEFOREEND);
+render(siteMenuElement, new SiteMenuView().element);
+render(siteFilterElement, new FilterView().element);
 render(siteTripInfo, new TripInfoView().element, RenderPosition.AFTERBEGIN);
 render(siteTripEvents, new SiteSortingView().element, RenderPosition.AFTERBEGIN);
 
-/*for (let i = 0; i < POINT_COUNT; i++) {
-  render(siteTripList, new TripPointView(tripPoints[i]).element, RenderPosition.BEFOREEND);
-}*/
-
 tripPoints.forEach((point) => renderTripPoint(siteTripList, point));
 /*
-render(siteTripList, new PointAddFormView(tripPoints[tripPoints.length-1]).element, RenderPosition.BEFOREEND);
-render(siteTripList, new PointEditFormView(tripPoints[0]).element, RenderPosition.AFTERBEGIN);*/
+render(siteTripList, new PointAddFormView(tripPoints[tripPoints.length-1]).element);
+*/
