@@ -7,6 +7,7 @@ import SiteSortingView from './view/site-sorting-view.js';
 import PointEditFormView from './view/point-edit-form-view.js';
 import TripPointView from './view/trip-point-view.js';
 import {generateTripPoint} from './mock/trip-point.js';
+import EmptyPointListView from './view/emptyPointListView';
 
 const POINT_COUNT = 6;
 
@@ -71,6 +72,11 @@ render(siteTripInfo, new TripInfoView().element, RenderPosition.AFTERBEGIN);
 render(siteTripEvents, new SiteSortingView().element, RenderPosition.AFTERBEGIN);
 
 tripPoints.forEach((point) => renderTripPoint(siteTripList, point));
+
+if (!siteTripList.firstElementChild) {
+  render(siteTripList, new EmptyPointListView().element);
+}
+
 /*
 render(siteTripList, new PointAddFormView(tripPoints[tripPoints.length-1]).element);
 */
