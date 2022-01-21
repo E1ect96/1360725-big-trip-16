@@ -34,8 +34,22 @@ const renderTripPoint = (TripListElement, tripPoint) => {
     TripListElement.replaceChild(tripPointComponent.element, tripPointEditComponent.element);
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   tripPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+  tripPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
   });
 
   tripPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
