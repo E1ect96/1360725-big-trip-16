@@ -1,5 +1,5 @@
 import {tripFullDate} from '../utils';
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const createPointEditFormTemplate = (tripPoint) => {
   const {type, time, price, destinationInfo} = tripPoint;
@@ -165,26 +165,15 @@ const createPointEditFormTemplate = (tripPoint) => {
   </li>`;
 };
 
-export default class PointEditFormView {
-  #element = null;
+export default class PointEditFormView extends AbstractView {
   #tripPoint = null;
 
   constructor(tripPoint) {
+    super();
     this.#tripPoint = tripPoint;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return createPointEditFormTemplate(this.#tripPoint);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
