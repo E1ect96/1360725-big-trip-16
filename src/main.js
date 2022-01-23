@@ -1,4 +1,4 @@
-import {RenderPosition, render} from './render.js';
+import {RenderPosition, render, replace} from './render.js';
 import SiteMenuView from './view/site-menu-view.js';
 import FilterView from './view/filter-view.js';
 import TripInfoView from './view/trip-info-view.js';
@@ -28,11 +28,11 @@ const renderTripPoint = (TripListElement, tripPoint) => {
   const tripPointEditComponent = new PointEditFormView(tripPoint);
 
   const replaceCardToForm = () => {
-    TripListElement.replaceChild(tripPointEditComponent.element, tripPointComponent.element);
+    replace(tripPointEditComponent, tripPointComponent);
   };
 
   const replaceFormToCard = () => {
-    TripListElement.replaceChild(tripPointComponent.element, tripPointEditComponent.element);
+    replace(tripPointComponent, tripPointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -56,18 +56,18 @@ const renderTripPoint = (TripListElement, tripPoint) => {
     replaceFormToCard();
   });
 
-  render(TripListElement, tripPointComponent.element);
+  render(TripListElement, tripPointComponent);
 };
 
-render(siteMenuElement, new SiteMenuView().element);
-render(siteFilterElement, new FilterView().element);
-render(siteTripInfo, new TripInfoView().element, RenderPosition.AFTERBEGIN);
-render(siteTripEvents, new SiteSortingView().element, RenderPosition.AFTERBEGIN);
+render(siteMenuElement, new SiteMenuView());
+render(siteFilterElement, new FilterView());
+render(siteTripInfo, new TripInfoView(), RenderPosition.AFTERBEGIN);
+render(siteTripEvents, new SiteSortingView(), RenderPosition.AFTERBEGIN);
 
 tripPoints.forEach((point) => renderTripPoint(siteTripList, point));
 
 if (!siteTripList.firstElementChild) {
-  render(siteTripList, new EmptyPointListView().element);
+  render(siteTripList, new EmptyPointListView());
 }
 
 /*
