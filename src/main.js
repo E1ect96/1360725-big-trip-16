@@ -43,23 +43,16 @@ const renderTripPoint = (TripListElement, tripPoint) => {
     }
   };
 
-  tripPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+  tripPointComponent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  tripPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-    evt.preventDefault();
+  tripPointEditComponent.setEditClickHandler(() => {
     replaceFormToCard();
   });
 
-  tripPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-  });
-
-  tripPointEditComponent.element.querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  tripPointEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
   });
 
