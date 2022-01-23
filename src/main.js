@@ -1,4 +1,4 @@
-import {RenderPosition, render, replace} from './render.js';
+import {RenderPosition, render, replace, remove} from './render.js';
 import SiteMenuView from './view/site-menu-view.js';
 import FilterView from './view/filter-view.js';
 import TripInfoView from './view/trip-info-view.js';
@@ -54,6 +54,10 @@ const renderTripPoint = (TripListElement, tripPoint) => {
 
   tripPointEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
+  });
+
+  tripPointEditComponent.setDeleteClickHandler(() => {
+    remove(tripPointEditComponent);
   });
 
   render(TripListElement, tripPointComponent);
