@@ -1,4 +1,4 @@
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const createSiteSortingTepmlate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -29,21 +29,8 @@ const createSiteSortingTepmlate = () => (
   </form>`
 );
 
-export default class SiteSortingView {
-  #element = null;
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
+export default class SiteSortingView extends AbstractView {
   get template() {
     return createSiteSortingTepmlate();
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
