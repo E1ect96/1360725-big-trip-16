@@ -7,6 +7,7 @@ import SiteSortingView from './view/site-sorting-view.js';
 import PointEditFormView from './view/point-edit-form-view.js';
 import TripPointView from './view/trip-point-view.js';
 import {generateTripPoint} from './mock/trip-point.js';
+import EmptyPointListView from './view/emptyPointListView';
 
 const POINT_COUNT = 6;
 
@@ -34,8 +35,22 @@ const renderTripPoint = (TripListElement, tripPoint) => {
     TripListElement.replaceChild(tripPointComponent.element, tripPointEditComponent.element);
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToCard();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   tripPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
     replaceCardToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+  tripPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+    evt.preventDefault();
+    replaceFormToCard();
   });
 
   tripPointEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
@@ -48,19 +63,20 @@ const renderTripPoint = (TripListElement, tripPoint) => {
     replaceFormToCard();
   });
 
-  render(TripListElement, tripPointComponent.element, RenderPosition.BEFOREEND);
+  render(TripListElement, tripPointComponent.element);
 };
 
-render(siteMenuElement, new SiteMenuView().element, RenderPosition.BEFOREEND);
-render(siteFilterElement, new FilterView().element, RenderPosition.BEFOREEND);
+render(siteMenuElement, new SiteMenuView().element);
+render(siteFilterElement, new FilterView().element);
 render(siteTripInfo, new TripInfoView().element, RenderPosition.AFTERBEGIN);
 render(siteTripEvents, new SiteSortingView().element, RenderPosition.AFTERBEGIN);
 
-/*for (let i = 0; i < POINT_COUNT; i++) {
-  render(siteTripList, new TripPointView(tripPoints[i]).element, RenderPosition.BEFOREEND);
-}*/
-
 tripPoints.forEach((point) => renderTripPoint(siteTripList, point));
+
+if (!siteTripList.firstElementChild) {
+  render(siteTripList, new EmptyPointListView().element);
+}
+
 /*
-render(siteTripList, new PointAddFormView(tripPoints[tripPoints.length-1]).element, RenderPosition.BEFOREEND);
-render(siteTripList, new PointEditFormView(tripPoints[0]).element, RenderPosition.AFTERBEGIN);*/
+render(siteTripList, new PointAddFormView(tripPoints[tripPoints.length-1]).element);
+*/
