@@ -1,5 +1,5 @@
 import {tripFullDate} from '../utils';
-import {createElement} from '../render';
+import AbstractView from './abstract-view';
 
 const createPointEditFormTemplate = (tripPoint) => {
   const {type, time, price, destinationInfo} = tripPoint;
@@ -165,26 +165,45 @@ const createPointEditFormTemplate = (tripPoint) => {
   </li>`;
 };
 
-export default class PointEditFormView {
-  #element = null;
+export default class PointEditFormView extends AbstractView {
   #tripPoint = null;
 
   constructor(tripPoint) {
+    super();
     this.#tripPoint = tripPoint;
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
   }
 
   get template() {
     return createPointEditFormTemplate(this.#tripPoint);
   }
 
-  removeElement() {
-    this.#element = null;
+  setFormSubmitHandler = (callback) => {
+    this._callback.formSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', this.#formSubmitHandler);
+  }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setEditClickHandler = (callback) => {
+    this._callback.editClick = callback;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+  }
+
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setDeleteClickHandler = (callback) => {
+    this._callback.deleteClick = callback;
+    this.element.querySelector('.event__reset-btn').addEventListener('click', this.#deleteClickHandler);
+  }
+
+  #deleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.deleteClick();
   }
 }
