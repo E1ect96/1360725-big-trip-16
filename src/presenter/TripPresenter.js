@@ -2,11 +2,10 @@ import SiteMenuView from '../view/site-menu-view';
 import FilterView from '../view/filter-view';
 import TripInfoView from '../view/trip-info-view';
 import SiteSortingView from '../view/site-sorting-view';
-import {remove, render, RenderPosition, replace} from '../render';
+import {render, RenderPosition} from '../render';
 import EmptyPointListView from '../view/emptyPointListView';
 import TripListView from '../view/trip-list-view';
-import TripPointView from '../view/trip-point-view';
-import PointEditFormView from '../view/point-edit-form-view';
+import PointPresenter from './PointPresenter';
 
 export default class TripPresenter {
   #menuContainer = null;
@@ -57,43 +56,8 @@ export default class TripPresenter {
   }
 
   #renderTripPoint = (tripPoint) => {
-    const tripPointComponent = new TripPointView(tripPoint);
-    const tripPointEditComponent = new PointEditFormView(tripPoint);
-
-    const replaceCardToForm = () => {
-      replace(tripPointEditComponent, tripPointComponent);
-    };
-
-    const replaceFormToCard = () => {
-      replace(tripPointComponent, tripPointEditComponent);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceFormToCard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    tripPointComponent.setEditClickHandler(() => {
-      replaceCardToForm();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    tripPointEditComponent.setEditClickHandler(() => {
-      replaceFormToCard();
-    });
-
-    tripPointEditComponent.setFormSubmitHandler(() => {
-      replaceFormToCard();
-    });
-
-    tripPointEditComponent.setDeleteClickHandler(() => {
-      remove(tripPointEditComponent);
-    });
-
-    render(this.#tripListComponent, tripPointComponent);
+    const pointPresenter = new PointPresenter(this.#tripListComponent);
+    pointPresenter.init(tripPoint);
   }
 
   #renderTripPoints = () => {
