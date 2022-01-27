@@ -20,8 +20,8 @@ export default class PointPresenter {
     this.#tripPointComponent = new TripPointView(point);
     this.#tripPointEditComponent = new PointEditFormView(point);
 
-    this.#tripPointComponent.setEditClickHandler(this.#handleEditClick);
-    this.#tripPointEditComponent.setEditClickHandler(this.#handleEditClick);
+    this.#tripPointComponent.setEditClickHandler(this.#handleCardEditClick);
+    this.#tripPointEditComponent.setEditClickHandler(this.#handleFormEditClick);
     this.#tripPointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#tripPointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
@@ -30,6 +30,7 @@ export default class PointPresenter {
 
   #replaceCardToForm = () => {
     replace(this.#tripPointEditComponent, this.#tripPointComponent);
+    document.addEventListener('keydown', this.#onEscKeyDownHandler);
   };
 
   #replaceFormToCard = () => {
@@ -45,8 +46,12 @@ export default class PointPresenter {
     }
   };
 
-  #handleEditClick = () => {
+  #handleCardEditClick = () => {
     this.#replaceCardToForm();
+  }
+
+  #handleFormEditClick = () => {
+    this.#replaceFormToCard();
   }
 
   #handleFormSubmit = () => {
