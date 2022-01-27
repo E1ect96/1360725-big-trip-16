@@ -1,6 +1,6 @@
 import TripPointView from '../view/trip-point-view';
 import PointEditFormView from '../view/point-edit-form-view';
-import {remove, render, replace} from '../render';
+import {remove, render, replace} from '../utils/render';
 
 export default class PointPresenter {
   #tripPointContainer = null;

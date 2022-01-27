@@ -2,7 +2,7 @@ import SiteMenuView from '../view/site-menu-view';
 import FilterView from '../view/filter-view';
 import TripInfoView from '../view/trip-info-view';
 import SiteSortingView from '../view/site-sorting-view';
-import {render, RenderPosition} from '../render';
+import {render, RenderPosition} from '../utils/render';
 import EmptyPointListView from '../view/emptyPointListView';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './PointPresenter';
