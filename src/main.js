@@ -8,6 +8,7 @@ import PointEditFormView from './view/point-edit-form-view.js';
 import TripPointView from './view/trip-point-view.js';
 import {generateTripPoint} from './mock/trip-point.js';
 import EmptyPointListView from './view/emptyPointListView';
+import TripListView from './view/trip-list-view';
 
 const POINT_COUNT = 6;
 
@@ -18,10 +19,7 @@ const siteMenuElement = siteBodyElement.querySelector('.trip-controls__navigatio
 const siteFilterElement = siteBodyElement.querySelector('.trip-controls__filters');
 const siteTripInfo = siteBodyElement.querySelector('.trip-main');
 const siteTripEvents = siteBodyElement.querySelector('.trip-events');
-
-const siteTripList = document.createElement('ul');
-siteTripList.classList.add('trip-events__list');
-siteTripEvents.appendChild(siteTripList);
+const siteTripList = new TripListView();
 
 const renderTripPoint = (TripListElement, tripPoint) => {
   const tripPointComponent = new TripPointView(tripPoint);
@@ -67,10 +65,11 @@ render(siteMenuElement, new SiteMenuView());
 render(siteFilterElement, new FilterView());
 render(siteTripInfo, new TripInfoView(), RenderPosition.AFTERBEGIN);
 render(siteTripEvents, new SiteSortingView(), RenderPosition.AFTERBEGIN);
+render(siteTripEvents, siteTripList);
 
 tripPoints.forEach((point) => renderTripPoint(siteTripList, point));
 
-if (!siteTripList.firstElementChild) {
+if (tripPoints.length ===0 ) {
   render(siteTripList, new EmptyPointListView());
 }
 
