@@ -17,6 +17,9 @@ export default class PointPresenter {
   init = (point) => {
     this.#point = point;
 
+    const prevTripPointComponent = this.#tripPointComponent;
+    const prevTripPointEditComponent = this.#tripPointEditComponent;
+
     this.#tripPointComponent = new TripPointView(point);
     this.#tripPointEditComponent = new PointEditFormView(point);
 
@@ -25,7 +28,26 @@ export default class PointPresenter {
     this.#tripPointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#tripPointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
-    render(this.#tripPointContainer, this.#tripPointComponent);
+    if (prevTripPointComponent === null || prevTripPointEditComponent === null) {
+      render(this.#tripPointContainer, this.#tripPointComponent);
+      return;
+    }
+
+    if (this.#tripPointContainer.element.contains(prevTripPointComponent.element)) {
+      replace(this.#tripPointComponent, prevTripPointComponent);
+    }
+
+    if (this.#tripPointContainer.element.contains(prevTripPointEditComponent.element)) {
+      replace(this.#tripPointEditComponent, prevTripPointEditComponent);
+    }
+
+    remove(prevTripPointComponent);
+    remove(prevTripPointEditComponent);
+  }
+
+  destroy = () => {
+    remove(this.#tripPointComponent);
+    remove(this.#tripPointEditComponent);
   }
 
   #replaceCardToForm = () => {
@@ -59,7 +81,6 @@ export default class PointPresenter {
   }
 
   #handleDeleteClick = () => {
-    remove(this.#tripPointComponent);
-    remove(this.#tripPointEditComponent);
+    this.destroy();
   }
 }
