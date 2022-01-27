@@ -21,6 +21,7 @@ export default class TripPresenter {
   #tripListComponent = new TripListView();
 
   #tripPoints = [];
+  #pointPresenter = new Map();
 
   constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer) {
     this.#menuContainer = menuContainer;
@@ -58,10 +59,16 @@ export default class TripPresenter {
   #renderTripPoint = (tripPoint) => {
     const pointPresenter = new PointPresenter(this.#tripListComponent);
     pointPresenter.init(tripPoint);
+    this.#pointPresenter.set(tripPoint.id, pointPresenter);
   }
 
   #renderTripPoints = () => {
     this.#tripPoints.forEach((point) => this.#renderTripPoint(point));
+  }
+
+  #clearTripPointList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
   }
 
   #renderTrip = () => {
