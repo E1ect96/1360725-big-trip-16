@@ -2,18 +2,26 @@ import TripPointView from '../view/trip-point-view';
 import PointEditFormView from '../view/point-edit-form-view';
 import {remove, render, replace} from '../utils/render';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
 export default class PointPresenter {
   #tripPointContainer = null;
   #changeData = null;
+  #changeMode = null;
 
   #tripPointComponent = null;
   #tripPointEditComponent = null;
 
   #point = null;
+  #mode = Mode.DEFAULT;
 
-  constructor(tripPointContainer, changeData) {
+  constructor(tripPointContainer, changeData, changeMode) {
     this.#tripPointContainer = tripPointContainer;
     this.#changeData = changeData;
+    this.#changeMode = changeMode;
   }
 
   init = (point) => {
@@ -37,11 +45,11 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#tripPointContainer.element.contains(prevTripPointComponent.element)) {
+    if (this.#mode === Mode.DEFAULT) {
       replace(this.#tripPointComponent, prevTripPointComponent);
     }
 
-    if (this.#tripPointContainer.element.contains(prevTripPointEditComponent.element)) {
+    if (this.#mode === Mode.EDITING) {
       replace(this.#tripPointEditComponent, prevTripPointEditComponent);
     }
 
@@ -54,14 +62,23 @@ export default class PointPresenter {
     remove(this.#tripPointEditComponent);
   }
 
+  resetView = () => {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#replaceFormToCard();
+    }
+  }
+
   #replaceCardToForm = () => {
     replace(this.#tripPointEditComponent, this.#tripPointComponent);
     document.addEventListener('keydown', this.#onEscKeyDownHandler);
+    this.#changeMode();
+    this.#mode = Mode.EDITING;
   };
 
   #replaceFormToCard = () => {
     replace(this.#tripPointComponent, this.#tripPointEditComponent);
     document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+    this.#mode = Mode.DEFAULT;
   };
 
   #onEscKeyDownHandler = (evt) => {
