@@ -6,6 +6,7 @@ import {render, RenderPosition} from '../utils/render';
 import EmptyPointListView from '../view/emptyPointListView';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './PointPresenter';
+import {updateItem} from '../utils/common';
 
 export default class TripPresenter {
   #menuContainer = null;
@@ -36,6 +37,11 @@ export default class TripPresenter {
     this.#renderTrip();
   }
 
+  #handlePointChange = (updatedPoint) => {
+    this.#tripPoints = updateItem(this.#tripPoints, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  }
+
   #renderMenu = () => {
     render(this.#menuContainer, this.#menuComponent);
   }
@@ -57,7 +63,7 @@ export default class TripPresenter {
   }
 
   #renderTripPoint = (tripPoint) => {
-    const pointPresenter = new PointPresenter(this.#tripListComponent);
+    const pointPresenter = new PointPresenter(this.#tripListComponent, this.#handlePointChange);
     pointPresenter.init(tripPoint);
     this.#pointPresenter.set(tripPoint.id, pointPresenter);
   }

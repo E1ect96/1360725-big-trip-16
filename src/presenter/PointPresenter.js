@@ -4,14 +4,16 @@ import {remove, render, replace} from '../utils/render';
 
 export default class PointPresenter {
   #tripPointContainer = null;
+  #changeData = null;
 
   #tripPointComponent = null;
   #tripPointEditComponent = null;
 
   #point = null;
 
-  constructor(tripPointContainer) {
+  constructor(tripPointContainer, changeData) {
     this.#tripPointContainer = tripPointContainer;
+    this.#changeData = changeData;
   }
 
   init = (point) => {
@@ -24,6 +26,8 @@ export default class PointPresenter {
     this.#tripPointEditComponent = new PointEditFormView(point);
 
     this.#tripPointComponent.setEditClickHandler(this.#handleCardEditClick);
+    this.#tripPointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+
     this.#tripPointEditComponent.setEditClickHandler(this.#handleFormEditClick);
     this.#tripPointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#tripPointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
@@ -76,11 +80,16 @@ export default class PointPresenter {
     this.#replaceFormToCard();
   }
 
-  #handleFormSubmit = () => {
+  #handleFormSubmit = (point) => {
+    this.#changeData(point);
     this.#replaceFormToCard();
   }
 
   #handleDeleteClick = () => {
     this.destroy();
+  }
+
+  #handleFavoriteClick = () => {
+    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
   }
 }
