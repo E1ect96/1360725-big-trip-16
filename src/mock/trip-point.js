@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 
 // Функция из интернета по генерации случайного числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
@@ -98,6 +99,7 @@ const generateAdditionalOptions = (optionCount) => {
 };
 
 export const generateTripPoint = () => ({
+  id: nanoid(),
   type: generateRandomType(),
   time: generateRandomDate(),
   price: generateRandomPrice(),
