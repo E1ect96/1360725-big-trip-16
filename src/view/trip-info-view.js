@@ -1,4 +1,4 @@
-import {calculateTotalCost} from '../utils';
+import {calculateTotalCost} from '../utils/utils';
 import {tripPoints} from '../main';
 import AbstractView from './abstract-view';
 

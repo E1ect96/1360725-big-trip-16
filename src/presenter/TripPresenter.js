@@ -7,6 +7,8 @@ import EmptyPointListView from '../view/emptyPointListView';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './PointPresenter';
 import {updateItem} from '../utils/common';
+import {SortType} from '../utils/const';
+import {sortByPrice, sortByTime} from '../mock/trip-point';
 
 export default class TripPresenter {
   #menuContainer = null;
@@ -23,6 +25,8 @@ export default class TripPresenter {
 
   #tripPoints = [];
   #pointPresenter = new Map();
+  #currentSortType = SortType.DEFAULT;
+  #sourcedTripPoints = [];
 
   constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer) {
     this.#menuContainer = menuContainer;
@@ -33,6 +37,7 @@ export default class TripPresenter {
 
   init = (tripPoints) => {
     this.#tripPoints = [...tripPoints];
+    this.#sourcedTripPoints = [...tripPoints];
 
     this.#renderTrip();
   }
@@ -43,6 +48,7 @@ export default class TripPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#tripPoints = updateItem(this.#tripPoints, updatedPoint);
+    this.#sourcedTripPoints = updateItem(this.#sourcedTripPoints, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
   }
 
@@ -58,8 +64,34 @@ export default class TripPresenter {
     render(this.#tripInfoContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
   }
 
+  #sortTasks = (sortType) => {
+    switch (sortType) {
+      case SortType.TIME:
+        this.#tripPoints.sort(sortByTime);
+        break;
+      case SortType.PRICE:
+        this.#tripPoints.sort(sortByPrice);
+        break;
+      default:
+        this.#tripPoints = [...this.#sourcedTripPoints];
+    }
+
+    this.#currentSortType = sortType;
+  }
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortTasks(sortType);
+    this.#clearTripPointList();
+    this.#renderTrip();
+  }
+
   #renderSorting = () => {
     render(this.#tripContainer, this.#sortingComponent);
+    this.#sortingComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderNoPoints = () => {

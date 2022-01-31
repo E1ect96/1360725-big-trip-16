@@ -1,4 +1,4 @@
-import {tripDate, tripTime, durationEvent} from '../utils';
+import {tripDate, tripTime, durationEvent} from '../utils/utils';
 import AbstractView from './abstract-view';
 
 const createTripPointTemplate = (tripPoint) => {

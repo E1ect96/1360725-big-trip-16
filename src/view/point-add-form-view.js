@@ -1,4 +1,4 @@
-import {tripFullDate} from '../utils';
+import {tripFullDate} from '../utils/utils';
 import AbstractView from './abstract-view';
 
 const createPointAddFormTemplate = (tripPoint) => {
