@@ -10,6 +10,14 @@ export const durationEvent = (startTime, endTime) => dayjs.duration(dayjs(endTim
 
 export const calculateTotalCost = (Points) => {
   let totalCost = 0;
-  Points.forEach((element) => {totalCost = totalCost + element.price;});
+  Points.forEach((element) => {
+    totalCost = totalCost + element.price;
+    element.additionalOptions.forEach((option) => {
+      if (option.isActive) {
+        totalCost = totalCost + option.price;
+      }
+    });
+  });
+
   return totalCost;
 };
