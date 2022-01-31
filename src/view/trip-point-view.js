@@ -2,7 +2,7 @@ import {tripDate, tripTime, durationEvent} from '../utils/utils';
 import AbstractView from './abstract-view';
 
 const createTripPointTemplate = (tripPoint) => {
-  const {type, time, price, additionalOptions, destinationInfo, isFavorite} = tripPoint;
+  const {type, time, price, destinationInfo, isFavorite} = tripPoint;
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -24,11 +24,7 @@ const createTripPointTemplate = (tripPoint) => {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-        <li class="event__offer">
-          <span class="event__offer-title">${additionalOptions.option.type}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${additionalOptions.option.price}</span>
-        </li>
+
       </ul>
       <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
         <span class="visually-hidden">Add to favorite</span>
@@ -45,10 +41,12 @@ const createTripPointTemplate = (tripPoint) => {
 
 export default class TripPointView extends AbstractView {
   #tripPoint = null;
+  #additionalOptions = null;
 
   constructor(tripPoint) {
     super();
     this.#tripPoint = tripPoint;
+    this.#additionalOptions = tripPoint.additionalOptions;
   }
 
   get template() {

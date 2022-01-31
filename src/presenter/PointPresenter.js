@@ -1,6 +1,7 @@
 import TripPointView from '../view/trip-point-view';
 import PointEditFormView from '../view/point-edit-form-view';
 import {remove, render, replace} from '../utils/render';
+import OptionPresenter from './OptionPresenter';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -11,11 +12,12 @@ export default class PointPresenter {
   #tripPointContainer = null;
   #changeData = null;
   #changeMode = null;
-
+  #tripAdditionOptionsContainer = null
   #tripPointComponent = null;
   #tripPointEditComponent = null;
 
   #point = null;
+  #options = null;
   #mode = Mode.DEFAULT;
 
   constructor(tripPointContainer, changeData, changeMode) {
@@ -26,11 +28,14 @@ export default class PointPresenter {
 
   init = (point) => {
     this.#point = point;
+    this.#options = point.additionalOptions;
 
     const prevTripPointComponent = this.#tripPointComponent;
     const prevTripPointEditComponent = this.#tripPointEditComponent;
 
     this.#tripPointComponent = new TripPointView(point);
+    this.#tripAdditionOptionsContainer = this.#tripPointComponent.element.querySelector('.event__selected-offers');
+    this.#renderPointOptions();
     this.#tripPointEditComponent = new PointEditFormView(point);
 
     this.#tripPointComponent.setEditClickHandler(this.#handleCardEditClick);
@@ -108,5 +113,16 @@ export default class PointPresenter {
 
   #handleFavoriteClick = () => {
     this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+  }
+
+  #renderPointOption = (option) => {
+    if (option.isActive) {
+      const optionPresenter = new OptionPresenter(this.#tripAdditionOptionsContainer);
+      optionPresenter.init(option);
+    }
+  }
+
+  #renderPointOptions = () => {
+    this.#options.forEach((option) => this.#renderPointOption(option));
   }
 }
