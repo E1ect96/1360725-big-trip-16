@@ -2,6 +2,7 @@ import TripPointView from '../view/trip-point-view';
 import PointEditFormView from '../view/point-edit-form-view';
 import {remove, render, replace} from '../utils/render';
 import OptionPresenter from './OptionPresenter';
+import OptionEditPresenter from './OptionEditPresenter';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -12,7 +13,8 @@ export default class PointPresenter {
   #tripPointContainer = null;
   #changeData = null;
   #changeMode = null;
-  #tripAdditionOptionsContainer = null
+  #tripAdditionOptionsContainer = null;
+  #tripAdditionOptionsEditContainer = null;
   #tripPointComponent = null;
   #tripPointEditComponent = null;
 
@@ -34,9 +36,12 @@ export default class PointPresenter {
     const prevTripPointEditComponent = this.#tripPointEditComponent;
 
     this.#tripPointComponent = new TripPointView(point);
+    this.#tripPointEditComponent = new PointEditFormView(point);
+
     this.#tripAdditionOptionsContainer = this.#tripPointComponent.element.querySelector('.event__selected-offers');
     this.#renderPointOptions();
-    this.#tripPointEditComponent = new PointEditFormView(point);
+    this.#tripAdditionOptionsEditContainer = this.#tripPointEditComponent.element.querySelector('.event__available-offers');
+    this.#renderEditPointOptions();
 
     this.#tripPointComponent.setEditClickHandler(this.#handleCardEditClick);
     this.#tripPointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
@@ -124,5 +129,18 @@ export default class PointPresenter {
 
   #renderPointOptions = () => {
     this.#options.forEach((option) => this.#renderPointOption(option));
+  }
+
+  #renderEditPointOption = (option) => {
+    const optionEditPresenter = new OptionEditPresenter(this.#tripAdditionOptionsEditContainer);
+    optionEditPresenter.init(option);
+  }
+
+  #renderEditPointOptions = () => {
+    if (this.#options.length === 0) {
+      this.#tripPointEditComponent.element.querySelector('.event__section--offers').classList.add('visually-hidden');
+    } else {
+      this.#options.forEach((option) => this.#renderEditPointOption(option));
+    }
   }
 }
