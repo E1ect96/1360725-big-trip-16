@@ -116,3 +116,11 @@ export const generateTripPoint = () => ({
   },
   isFavorite: tossACoin(),
 });
+
+export const sortByPrice = (pointA, pointB) => (pointB.price - pointA.price);
+
+export const sortByTime = (pointA, pointB) => {
+  const diffA = dayjs(pointA.time.end).diff(dayjs(pointA.time.start));
+  const diffB = dayjs(pointB.time.end).diff(dayjs(pointB.time.start));
+  return diffB - diffA;
+};
