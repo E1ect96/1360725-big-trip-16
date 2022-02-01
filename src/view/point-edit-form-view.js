@@ -133,6 +133,16 @@ export default class PointEditFormView extends AbstractView {
     return createPointEditFormTemplate(this._data);
   }
 
+  updateData = (update) => {
+    if (!update) {
+      return;
+    }
+
+    this._data = {...this._data, ...update};
+
+    this.updateElement();
+  }
+
   updateElement = () => {
     const prevElement = this.element;
     const parent = prevElement.parentElement;
