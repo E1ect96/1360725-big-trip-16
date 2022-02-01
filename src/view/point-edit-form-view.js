@@ -1,8 +1,8 @@
 import {tripFullDate} from '../utils/utils';
 import AbstractView from './abstract-view';
 
-const createPointEditFormTemplate = (tripPoint) => {
-  const {type, time, price, destinationInfo} = tripPoint;
+const createPointEditFormTemplate = (data) => {
+  const {type, time, price, destinationInfo} = data;
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -123,15 +123,24 @@ const createPointEditFormTemplate = (tripPoint) => {
 };
 
 export default class PointEditFormView extends AbstractView {
-  #tripPoint = null;
 
   constructor(tripPoint) {
     super();
-    this.#tripPoint = tripPoint;
+    this._data = PointEditFormView.parsePointToData(tripPoint);
   }
 
   get template() {
-    return createPointEditFormTemplate(this.#tripPoint);
+    return createPointEditFormTemplate(this._data);
+  }
+
+  updateElement = () => {
+    const prevElement = this.element;
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.element;
+
+    parent.replaceChild(newElement, prevElement);
   }
 
   setFormSubmitHandler = (callback) => {
@@ -141,7 +150,7 @@ export default class PointEditFormView extends AbstractView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this._callback.formSubmit(this.#tripPoint);
+    this._callback.formSubmit(PointEditFormView.parseDataToPoint(this._data));
   }
 
   setEditClickHandler = (callback) => {
@@ -163,4 +172,8 @@ export default class PointEditFormView extends AbstractView {
     evt.preventDefault();
     this._callback.deleteClick();
   }
+
+  static parsePointToData = (point) => ({...point});
+
+  static  parseDataToPoint = (data) => ({...data});
 }
