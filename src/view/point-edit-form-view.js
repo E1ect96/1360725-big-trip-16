@@ -135,6 +135,12 @@ export default class PointEditFormView extends SmartView {
     return createPointEditFormTemplate(this._data);
   }
 
+  reset = (point) => {
+    this.updateData(
+      PointEditFormView.parsePointToData(point),
+    );
+  }
+
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
@@ -143,6 +149,10 @@ export default class PointEditFormView extends SmartView {
   #setInnerHandlers = () => {
     this.element.querySelector('.event__type-group')
       .addEventListener('change', this.#typeChangeHandler);
+    this.element.querySelector('.event__input--destination')
+      .addEventListener('input', this.#destinationInputHandler );
+    this.element.querySelector('.event__input--price')
+      .addEventListener('input', this.#destinationInputHandler );
   }
 
   #typeChangeHandler = (evt) => {
@@ -179,6 +189,13 @@ export default class PointEditFormView extends SmartView {
   #deleteClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.deleteClick();
+  }
+
+  #destinationInputHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      destination: evt.target.value,
+    }, true);
   }
 
   static parsePointToData = (point) => ({...point});

@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view';
+import SmartView from './smart-view';
 
 const createAdditionOptionTemplate = (option) => `<li class="event__offer">
     <span class="event__offer-title">${option.type}</span>
@@ -6,7 +6,7 @@ const createAdditionOptionTemplate = (option) => `<li class="event__offer">
     <span class="event__offer-price">${option.price}</span>
   </li>`;
 
-export default class AdditionOptionView extends AbstractView {
+export default class AdditionOptionView extends SmartView {
   #option = null;
 
   constructor(option) {

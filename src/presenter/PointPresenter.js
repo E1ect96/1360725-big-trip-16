@@ -74,6 +74,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#tripPointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
@@ -94,6 +95,7 @@ export default class PointPresenter {
   #onEscKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
+      this.#tripPointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
       document.removeEventListener('keydown', this.#onEscKeyDownHandler);
     }
