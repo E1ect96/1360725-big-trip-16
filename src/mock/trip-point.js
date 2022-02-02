@@ -86,24 +86,21 @@ const tossACoin = () => {
   return coinResult[getRandomInteger(0, 1)];
 };
 
-const generateAdditionalOptions = (optionCount) => {
-  const additionalOptions = {};
-  for (let i = 0; i < optionCount; i++) {
-    additionalOptions.option = {
-      id: i,
-      type: generateRandomType(),
-      price: (generateRandomPrice() / 10),
-    };
-  }
-  return additionalOptions;
-};
+const generateAdditionalOption = () => ({
+  id: nanoid(),
+  type: generateRandomType(),
+  price: (generateRandomPrice() / 10),
+  isActive: tossACoin(),
+});
+
+const generateAdditionalOptions = (optionCount) => Array.from({length: optionCount}, generateAdditionalOption);
 
 export const generateTripPoint = () => ({
   id: nanoid(),
   type: generateRandomType(),
   time: generateRandomDate(),
   price: generateRandomPrice(),
-  additionalOptions: generateAdditionalOptions(getRandomInteger(1, 5)),
+  additionalOptions: generateAdditionalOptions(getRandomInteger(0, 3)),
   destinationInfo: {
     description: generateRandomDescription(),
     name: generateRandomDestination(),
