@@ -56,7 +56,7 @@ const generateRandomDescription = () => {
     'Sed sed nisi sed augue convallis suscipit in sed felis.',
     'Aliquam erat volutpat.',
     'Nunc fermentum tortor ac porta dapibus.',
-    'In rutrum ac purus sit amet tempus.'
+    'In rutrum ac purus sit amet tempus.',
   ];
 
   let description = '';
@@ -107,7 +107,7 @@ export const generateTripPoint = () => ({
     pictures: [
       {
         src: `http://picsum.photos/300/200?r=${  getRandomInteger(0, 255)}`,
-        description: 'Chamonix parliament building'
+        description: 'Chamonix parliament building',
       }
     ]
   },
