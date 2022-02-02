@@ -108,8 +108,8 @@ export const generateTripPoint = () => ({
       {
         src: `http://picsum.photos/300/200?r=${  getRandomInteger(0, 255)}`,
         description: 'Chamonix parliament building',
-      }
-    ]
+      },
+    ],
   },
   isFavorite: tossACoin(),
 });
