@@ -152,7 +152,7 @@ export default class PointEditFormView extends SmartView {
     this.element.querySelector('.event__input--destination')
       .addEventListener('input', this.#destinationInputHandler );
     this.element.querySelector('.event__input--price')
-      .addEventListener('input', this.#destinationInputHandler );
+      .addEventListener('input', this.#priceInputHandler );
   }
 
   #typeChangeHandler = (evt) => {
@@ -194,7 +194,15 @@ export default class PointEditFormView extends SmartView {
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
-      destination: evt.target.value,
+      destinationInfo:
+        {name : evt.target.value,},
+    }, true);
+  }
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value,
     }, true);
   }
 

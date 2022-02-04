@@ -61,7 +61,7 @@ const generateRandomDescription = () => {
 
   let description = '';
   for (let i = 0; i < getRandomInteger(1,5); i++) {
-    description = `${description + descriptions[getRandomInteger(0, descriptions.length)]  } `;
+    description = `${description + descriptions[getRandomInteger(0, descriptions.length - 1)]  } `;
   }
   return description;
 };

@@ -83,23 +83,23 @@ export default class PointPresenter {
 
   #replaceCardToForm = () => {
     replace(this.#tripPointEditComponent, this.#tripPointComponent);
-    document.addEventListener('keydown', this.#escKeyDownHandler);
+    document.addEventListener('keydown', this.#handleEscKeyDown);
     this.#changeMode();
     this.#mode = Mode.EDITING;
   };
 
   #replaceFormToCard = () => {
     replace(this.#tripPointComponent, this.#tripPointEditComponent);
-    document.removeEventListener('keydown', this.#escKeyDownHandler);
+    document.removeEventListener('keydown', this.#handleEscKeyDown);
     this.#mode = Mode.DEFAULT;
   };
 
-  #escKeyDownHandler = (evt) => {
+  #handleEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#tripPointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#escKeyDownHandler);
+      document.removeEventListener('keydown', this.#handleEscKeyDown);
     }
   };
 
@@ -108,6 +108,7 @@ export default class PointPresenter {
   }
 
   #handleFormEditClick = () => {
+    this.#tripPointEditComponent.reset(this.#point);
     this.#replaceFormToCard();
   }
 
