@@ -1,8 +1,8 @@
 import TripPointView from '../view/trip-point-view';
 import PointEditFormView from '../view/point-edit-form-view';
 import {remove, render, replace} from '../utils/render';
-import OptionPresenter from './OptionPresenter';
-import OptionEditPresenter from './OptionEditPresenter';
+import AdditionOptionView from '../view/addition-option-view';
+import AdditionOptionEditView from '../view/addition-option-edit-view';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -15,6 +15,8 @@ export default class PointPresenter {
   #changeMode = null;
   #tripAdditionOptionsContainer = null;
   #tripAdditionOptionsEditContainer = null;
+  #tripAdditionOptionComponent = null;
+  #tripAdditionOptionEditComponent = null;
   #tripPointComponent = null;
   #tripPointEditComponent = null;
 
@@ -81,23 +83,23 @@ export default class PointPresenter {
 
   #replaceCardToForm = () => {
     replace(this.#tripPointEditComponent, this.#tripPointComponent);
-    document.addEventListener('keydown', this.#onEscKeyDownHandler);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#changeMode();
     this.#mode = Mode.EDITING;
   };
 
   #replaceFormToCard = () => {
     replace(this.#tripPointComponent, this.#tripPointEditComponent);
-    document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
   };
 
-  #onEscKeyDownHandler = (evt) => {
+  #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#tripPointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+      document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
 
@@ -124,8 +126,8 @@ export default class PointPresenter {
 
   #renderPointOption = (option) => {
     if (option.isActive) {
-      const optionPresenter = new OptionPresenter(this.#tripAdditionOptionsContainer);
-      optionPresenter.init(option);
+      this.#tripAdditionOptionComponent = new AdditionOptionView(option);
+      render(this.#tripAdditionOptionsContainer, this.#tripAdditionOptionComponent);
     }
   }
 
@@ -134,8 +136,8 @@ export default class PointPresenter {
   }
 
   #renderEditPointOption = (option) => {
-    const optionEditPresenter = new OptionEditPresenter(this.#tripAdditionOptionsEditContainer);
-    optionEditPresenter.init(option);
+    this.#tripAdditionOptionEditComponent = new AdditionOptionEditView(option);
+    render(this.#tripAdditionOptionsEditContainer, this.#tripAdditionOptionEditComponent);
   }
 
   #renderEditPointOptions = () => {
