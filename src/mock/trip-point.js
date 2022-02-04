@@ -82,8 +82,8 @@ const generateRandomPrice = () => (
 );
 
 const tossACoin = () => {
-  const coinResult = [true, false];
-  return coinResult[getRandomInteger(0, 1)];
+  const coinResults = [true, false];
+  return coinResults[getRandomInteger(0, 1)];
 };
 
 const generateAdditionalOption = () => ({

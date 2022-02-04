@@ -1,5 +1,5 @@
 import {render} from '../utils/render';
-import AdditionOptionEditView from '../view/additionOptionEditView';
+import AdditionOptionEditView from '../view/addition-option-edit-view';
 
 export default class OptionEditPresenter {
   #optionsContainer = null;

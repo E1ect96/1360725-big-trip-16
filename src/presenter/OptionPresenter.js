@@ -1,5 +1,5 @@
 import {render} from '../utils/render';
-import AdditionOptionView from '../view/additionOptionView';
+import AdditionOptionView from '../view/addition-option-view';
 
 export default class OptionPresenter {
   #optionsContainer = null;
