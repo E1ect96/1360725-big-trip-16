@@ -140,16 +140,32 @@ const createPointEditFormTemplate = (data) => {
 };
 
 export default class PointEditFormView extends SmartView {
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor(tripPoint) {
     super();
     this._data = PointEditFormView.parsePointToData(tripPoint);
 
     this.#setInnerHandlers();
+    this.#setDatepickers();
   }
 
   get template() {
     return createPointEditFormTemplate(this._data);
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
   }
 
   reset = (point) => {
@@ -161,6 +177,46 @@ export default class PointEditFormView extends SmartView {
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.#setDatepickers();
+  }
+
+  #setDatepickers = () => {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._data.time.start,
+        enableTime: true,
+        'time_24hr': true,
+        onChange: this.#startDateChangeHandler,
+      },
+    );
+    this.#datepickerEnd = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._data.time.end,
+        enableTime: true,
+        'time_24hr': true,
+        onChange: this.#endDateChangeHandler,
+      },
+    );
+  }
+
+  #startDateChangeHandler = ([userDate]) => {
+    this.updateData({
+      time: {
+        start: userDate,
+      },
+    });
+  }
+
+  #endDateChangeHandler = ([userDate]) => {
+    this.updateData({
+      time: {
+        end: userDate,
+      },
+    });
   }
 
   #setInnerHandlers = () => {
