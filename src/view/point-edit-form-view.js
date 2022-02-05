@@ -1,8 +1,29 @@
 import {tripFullDate} from '../utils/utils';
 import SmartView from './smart-view';
 
+const createPointEditFormOptionsTemplate = (options) => (`
+  ${(options.length !== 0) ? `
+  <section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+            ${options.map((option) => `
+                <div class="event__offer-selector">
+                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.type}-${option.id}" type="checkbox" name="event-offer-${option.type}" ${option.isActive ? 'checked' : ''}>
+                    <label class="event__offer-label" for="event-offer-${option.type}-${option.id}">
+                        <span class="event__offer-title">${option.type}</span>
+                        &plus;&euro;&nbsp;
+                        <span class="event__offer-price">${option.price}</span>
+                    </label>
+                </div>
+            `).join('')}
+        </div>
+    </section>
+  ` : ''}
+  `);
+
 const createPointEditFormTemplate = (data) => {
-  const {type, time, price, destinationInfo} = data;
+  const {type, time, price, additionalOptions, destinationInfo} = data;
+  const optionsTemplate = createPointEditFormOptionsTemplate(additionalOptions);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -105,14 +126,7 @@ const createPointEditFormTemplate = (data) => {
         </button>
       </header>
       <section class="event__details">
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-          <div class="event__available-offers">
-
-          </div>
-        </section>
-
+        ${optionsTemplate}
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destinationInfo.description}</p>

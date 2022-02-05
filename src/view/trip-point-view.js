@@ -1,8 +1,21 @@
 import {tripDate, tripTime, durationEvent} from '../utils/utils';
 import AbstractView from './abstract-view';
 
+const createPointOptionsTemplate = (options) => (`
+  ${options.map((option) => `
+    ${(option.isActive) ? `
+      <li class="event__offer">
+        <span class="event__offer-title">${option.type}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${option.price}</span>
+    </li>
+    ` : ''}
+  `).join('')}
+`);
+
 const createTripPointTemplate = (tripPoint) => {
-  const {type, time, price, destinationInfo, isFavorite} = tripPoint;
+  const {type, time, price, additionalOptions, destinationInfo, isFavorite} = tripPoint;
+  const optionsTemplate = createPointOptionsTemplate(additionalOptions);
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -24,7 +37,7 @@ const createTripPointTemplate = (tripPoint) => {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-
+        ${optionsTemplate}
       </ul>
       <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
         <span class="visually-hidden">Add to favorite</span>
