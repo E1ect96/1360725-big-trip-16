@@ -40,7 +40,7 @@ export default class PointPresenter {
     this.#tripPointEditComponent.setEditClickHandler(this.#handleFormEditClick);
     this.#tripPointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#tripPointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
-    /*  this.#tripPointEditComponent.setOptionClickHandler(this.#handleOptionClick);*/
+    /*    this.#tripPointEditComponent.setOptionClickHandler(this.#handleOptionClick);*/
 
     if (prevTripPointComponent === null || prevTripPointEditComponent === null) {
       render(this.#tripPointContainer, this.#tripPointComponent);

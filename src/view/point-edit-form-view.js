@@ -1,5 +1,8 @@
 import {tripFullDate} from '../utils/utils';
 import SmartView from './smart-view';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createPointEditFormOptionsTemplate = (options) => (`
   ${(options.length !== 0) ? `
@@ -219,6 +222,16 @@ export default class PointEditFormView extends SmartView {
       price: evt.target.value,
     }, true);
   }
+
+  /*  setOptionClickHandler = (callback) => {
+    this._callback.optionClick = callback;
+    this.element.querySelector('.event__offer-label').addEventListener('click', this.#optionClickHandler);
+  }
+
+  #optionClickHandler = (evt) => {
+    evt.preventDefault();
+    this.element.isActive = evt.target.checked;
+  }*/
 
   static parsePointToData = (point) => ({...point});
 
