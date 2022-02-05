@@ -6,7 +6,6 @@ import {render, RenderPosition} from '../utils/render';
 import EmptyPointListView from '../view/empty-point-list-view';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './point-presenter';
-import {updateItem} from '../utils/common';
 import {SortType} from '../utils/const';
 import {sortByPrice, sortByTime} from '../mock/trip-point';
 
@@ -24,10 +23,8 @@ export default class TripPresenter {
   #noPointsComponent = new EmptyPointListView();
   #tripListComponent = new TripListView();
 
-  #tripPoints = [];
   #pointPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
-  #sourcedTripPoints = [];
 
   constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer, pointsModel) {
     this.#menuContainer = menuContainer;
@@ -38,13 +35,17 @@ export default class TripPresenter {
   }
 
   get points() {
+    switch (this.#currentSortType) {
+      case SortType.TIME:
+        return [...this.#pointsModel.points].sort(sortByTime);
+      case SortType.PRICE:
+        return [...this.#pointsModel.points].sort(sortByPrice);
+    }
+
     return this.#pointsModel.points;
   }
 
-  init = (tripPoints) => {
-    this.#tripPoints = [...tripPoints];
-    this.#sourcedTripPoints = [...tripPoints];
-
+  init = () => {
     this.#renderTrip();
   }
 
@@ -53,8 +54,6 @@ export default class TripPresenter {
   }
 
   #handlePointChange = (updatedPoint) => {
-    this.#tripPoints = updateItem(this.#tripPoints, updatedPoint);
-    this.#sourcedTripPoints = updateItem(this.#sourcedTripPoints, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
   }
 
@@ -70,27 +69,12 @@ export default class TripPresenter {
     render(this.#tripInfoContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
   }
 
-  #sortTasks = (sortType) => {
-    switch (sortType) {
-      case SortType.TIME:
-        this.#tripPoints.sort(sortByTime);
-        break;
-      case SortType.PRICE:
-        this.#tripPoints.sort(sortByPrice);
-        break;
-      default:
-        this.#tripPoints = [...this.#sourcedTripPoints];
-    }
-
-    this.#currentSortType = sortType;
-  }
-
   #handleSortTypeChange = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
 
-    this.#sortTasks(sortType);
+    this.#currentSortType = sortType;
     this.#clearTripPointList();
     this.#renderTrip();
   }
@@ -110,8 +94,8 @@ export default class TripPresenter {
     this.#pointPresenter.set(tripPoint.id, pointPresenter);
   }
 
-  #renderTripPoints = () => {
-    this.#tripPoints.forEach((point) => this.#renderTripPoint(point));
+  #renderTripPoints = (points) => {
+    points.forEach((point) => this.#renderTripPoint(point));
   }
 
   #clearTripPointList = () => {
@@ -126,10 +110,10 @@ export default class TripPresenter {
     this.#renderSorting();
     render (this.#tripContainer, this.#tripListComponent);
 
-    if (this.#tripPoints.length === 0) {
+    if (this.points === 0) {
       this.#renderNoPoints();
     }
 
-    this.#renderTripPoints();
+    this.#renderTripPoints(this.points);
   }
 }
