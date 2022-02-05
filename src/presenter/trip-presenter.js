@@ -15,6 +15,7 @@ export default class TripPresenter {
   #filterContainer = null;
   #tripInfoContainer = null;
   #tripContainer = null;
+  #pointsModel = null;
 
   #menuComponent = new SiteMenuView();
   #filterComponent = new FilterView();
@@ -28,11 +29,16 @@ export default class TripPresenter {
   #currentSortType = SortType.DEFAULT;
   #sourcedTripPoints = [];
 
-  constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer) {
+  constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer, pointsModel) {
     this.#menuContainer = menuContainer;
     this.#filterContainer = filterContainer;
     this.#tripInfoContainer = tripInfoContainer;
     this.#tripContainer = tripContainer;
+    this.#pointsModel = pointsModel;
+  }
+
+  get points() {
+    return this.#pointsModel.points;
   }
 
   init = (tripPoints) => {
