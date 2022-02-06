@@ -2,6 +2,7 @@ import {generateTripPoint} from './mock/trip-point.js';
 import TripPresenter from './presenter/trip-presenter';
 import PointsModel from './model/points-model';
 import FilterModel from './model/filter-model';
+import FilterPresenter from './presenter/filter-presenter';
 
 const POINT_COUNT = 6;
 
@@ -18,6 +19,8 @@ const siteFilterElement = siteBodyElement.querySelector('.trip-controls__filters
 const siteTripInfo = siteBodyElement.querySelector('.trip-main');
 const siteTripEvents = siteBodyElement.querySelector('.trip-events');
 
-const tripPresenter = new TripPresenter(siteMenuElement, siteFilterElement, siteTripInfo, siteTripEvents, pointsModel);
+const tripPresenter = new TripPresenter(siteMenuElement, siteFilterElement, siteTripInfo, siteTripEvents, pointsModel, filterModel);
+const filterPresenter = new FilterPresenter(siteFilterElement, filterModel);
 
 tripPresenter.init();
+filterPresenter.init();
