@@ -1,6 +1,7 @@
 import TripPointView from '../view/trip-point-view';
 import PointEditFormView from '../view/point-edit-form-view';
 import {remove, render, replace} from '../utils/render';
+import {UpdateType, UserAction} from '../utils/const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -103,7 +104,11 @@ export default class PointPresenter {
   }
 
   #handleFormSubmit = (point) => {
-    this.#changeData(point);
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MAJOR,
+      point,
+    );
     this.#replaceFormToCard();
   }
 
@@ -112,7 +117,11 @@ export default class PointPresenter {
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
   }
 
   #handleOptionClick = () => {
