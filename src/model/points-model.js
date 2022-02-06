@@ -11,7 +11,7 @@ export default class PointsModel extends AbstractObservable {
     return this.#points;
   }
 
-  updateItem = (updateType, update) => {
+  updatePoint = (updateType, update) => {
     const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
