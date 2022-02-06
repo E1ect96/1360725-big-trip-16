@@ -5,7 +5,7 @@ import {remove, render, RenderPosition} from '../utils/render';
 import EmptyPointListView from '../view/empty-point-list-view';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './point-presenter';
-import {FilterType, SortType, UpdateType, UserAction} from '../utils/const';
+import {SortType, UpdateType, UserAction} from '../utils/const';
 import {sortByPrice, sortByTime} from '../mock/trip-point';
 import {filter} from '../utils/filters';
 
