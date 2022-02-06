@@ -1,6 +1,7 @@
 import {generateTripPoint} from './mock/trip-point.js';
 import TripPresenter from './presenter/trip-presenter';
 import PointsModel from './model/points-model';
+import FilterModel from './model/filter-model';
 
 const POINT_COUNT = 6;
 
@@ -8,6 +9,7 @@ export const tripPoints = Array.from({length: POINT_COUNT}, generateTripPoint);
 
 const pointsModel = new PointsModel();
 pointsModel.points = tripPoints;
+const filterModel = new FilterModel();
 
 
 const siteBodyElement = document.querySelector('.page-body');
