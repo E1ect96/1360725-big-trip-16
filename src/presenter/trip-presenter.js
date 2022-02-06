@@ -80,7 +80,7 @@ export default class TripPresenter {
         this.#renderTripPoints(this.points);
         break;
       case UpdateType.MAJOR:
-        this.#clearBoard();
+        this.#clearTrip();
         this.#renderTrip();
         break;
     }
@@ -136,7 +136,7 @@ export default class TripPresenter {
     this.#pointPresenter.clear();
   }
 
-  #clearBoard = ({resetSortType = false} = {}) => {
+  #clearTrip = ({resetSortType = false} = {}) => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
 

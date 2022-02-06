@@ -188,7 +188,7 @@ export default class PointEditFormView extends SmartView {
         defaultDate: this._data.time.start,
         enableTime: true,
         'time_24hr': true,
-        onChange: this.#startDateChangeHandler,
+        onClose: this.#startDateChangeHandler,
       },
     );
     this.#datepickerEnd = flatpickr(
@@ -198,7 +198,7 @@ export default class PointEditFormView extends SmartView {
         defaultDate: this._data.time.end,
         enableTime: true,
         'time_24hr': true,
-        onChange: this.#endDateChangeHandler,
+        onClose: this.#endDateChangeHandler,
       },
     );
   }
@@ -208,7 +208,7 @@ export default class PointEditFormView extends SmartView {
       time: {
         start: userDate,
       },
-    });
+    }, true);
   }
 
   #endDateChangeHandler = ([userDate]) => {
@@ -216,7 +216,7 @@ export default class PointEditFormView extends SmartView {
       time: {
         end: userDate,
       },
-    });
+    }, true);
   }
 
   #setInnerHandlers = () => {
@@ -261,7 +261,7 @@ export default class PointEditFormView extends SmartView {
 
   #deleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.deleteClick();
+    this._callback.deleteClick(PointEditFormView.parseDataToPoint(this._data));
   }
 
   #destinationInputHandler = (evt) => {

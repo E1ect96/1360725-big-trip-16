@@ -112,8 +112,12 @@ export default class PointPresenter {
     this.#replaceFormToCard();
   }
 
-  #handleDeleteClick = () => {
-    this.destroy();
+  #handleDeleteClick = (point) => {
+    this.#changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   }
 
   #handleFavoriteClick = () => {
