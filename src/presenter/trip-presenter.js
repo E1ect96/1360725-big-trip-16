@@ -5,7 +5,7 @@ import {remove, render, RenderPosition} from '../utils/render';
 import EmptyPointListView from '../view/empty-point-list-view';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './point-presenter';
-import {SortType, UpdateType, UserAction} from '../utils/const';
+import {FilterType, SortType, UpdateType, UserAction} from '../utils/const';
 import {sortByPrice, sortByTime} from '../mock/trip-point';
 import {filter} from '../utils/filters';
 
@@ -19,12 +19,13 @@ export default class TripPresenter {
 
   #menuComponent = new SiteMenuView();
   #tripInfoComponent = new TripInfoView();
-  #noPointsComponent = new EmptyPointListView();
+  #noPointsComponent = null;
   #tripListComponent = new TripListView();
   #sortingComponent = null;
 
   #pointPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
+  #filterType = FilterType.EVERYTHING;
 
   constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer, pointsModel, filterModel) {
     this.#menuContainer = menuContainer;
@@ -39,9 +40,9 @@ export default class TripPresenter {
   }
 
   get points() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const points = this.#pointsModel.points;
-    const filteredPoints = filter[filterType](points);
+    const filteredPoints = filter[this.#filterType](points);
 
     switch (this.#currentSortType) {
       case SortType.TIME:
@@ -120,6 +121,7 @@ export default class TripPresenter {
   }
 
   #renderNoPoints = () => {
+    this.#noPointsComponent = new EmptyPointListView(this.#filterType);
     render(this.#tripContainer, this.#noPointsComponent);
   }
 
@@ -143,9 +145,12 @@ export default class TripPresenter {
     this.#pointPresenter.clear();
 
     remove(this.#sortingComponent);
-    remove(this.#noPointsComponent);
     remove(this.#menuComponent);
     remove(this.#tripInfoComponent);
+
+    if (this.#noPointsComponent) {
+      remove(this.#noPointsComponent);
+    }
 
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;
