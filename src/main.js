@@ -8,12 +8,15 @@ import ButtonAddEventView from './view/add-new-event-button-view';
 import {remove, render, RenderPosition} from './utils/render';
 import {MenuItem} from './utils/const';
 import StatisticsView from './view/stat-view';
+import ApiService from './api-service';
 
 const POINT_COUNT = 6;
+const AUTHORIZATION = 'Basic e1ect96';
+const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
 export const tripPoints = Array.from({length: POINT_COUNT}, generateTripPoint);
 
-const pointsModel = new PointsModel();
+const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 pointsModel.points = tripPoints;
 const filterModel = new FilterModel();
 
