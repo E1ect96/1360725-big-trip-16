@@ -42,6 +42,8 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.ADD_NEW_POINT:
       // Скрыть статистику
       // Показать фильтры
+      tripPresenter.destroy();
+      tripPresenter.init();
       // Показать eventbox
       // Показать форму добавления новой задачи
       tripPresenter.createTripPoint(handleNewEventFormClose);
@@ -49,14 +51,14 @@ const handleSiteMenuClick = (menuItem) => {
       newEventButton.setMenuItem();
       // Убрать выделение с ADD NEW TASK после сохранения (эта логика прописана в createTask в trip-presenter)
       break;
-    case MenuItem.TASKS:
+    case MenuItem.TABLE:
       // Показать фильтры
-      // Показать доску
+      tripPresenter.init();
       // Скрыть статистику
       break;
-    case MenuItem.STATISTICS:
+    case MenuItem.STATS:
       // Скрыть фильтры
-      // Скрыть доску
+      tripPresenter.destroy();
       // Показать статистику
       break;
   }
