@@ -24,3 +24,20 @@ export const calculateTotalCost = (Points) => {
 
   return totalCost;
 };
+
+export const defaultPoint = () => ({
+  id: 0,
+  type: 'train',
+  time: {
+    start: new Date(),
+    end: new Date(),
+  },
+  price: '',
+  additionalOptions: [],
+  destinationInfo: {
+    description: '',
+    name: '',
+    pictures: [],
+  },
+  isFavorite: false,
+});

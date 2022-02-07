@@ -24,3 +24,8 @@ const filterPresenter = new FilterPresenter(siteFilterElement, filterModel);
 
 tripPresenter.init();
 filterPresenter.init();
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createTripPoint();
+});

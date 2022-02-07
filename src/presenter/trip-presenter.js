@@ -8,6 +8,7 @@ import PointPresenter from './point-presenter';
 import {FilterType, SortType, UpdateType, UserAction} from '../utils/const';
 import {sortByPrice, sortByTime} from '../mock/trip-point';
 import {filter} from '../utils/filters';
+import NewPointPresenter from './new-point-presenter';
 
 export default class TripPresenter {
   #menuContainer = null;
@@ -24,6 +25,7 @@ export default class TripPresenter {
   #sortingComponent = null;
 
   #pointPresenter = new Map();
+  #newPointPresenter = null;
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.EVERYTHING;
 
@@ -34,6 +36,8 @@ export default class TripPresenter {
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
+
+    this.#newPointPresenter = new NewPointPresenter(this.#tripListComponent, this.#handleViewAction);
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -56,6 +60,12 @@ export default class TripPresenter {
 
   init = () => {
     this.#renderTrip();
+  }
+
+  createTripPoint = () => {
+    this.#currentSortType = SortType.DEFAULT;
+    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#newPointPresenter.init();
   }
 
   #handleModeChange = () => {
@@ -143,6 +153,7 @@ export default class TripPresenter {
   #clearTrip = ({resetSortType = false} = {}) => {
     this.#pointPresenter.forEach((presenter) => presenter.destroy());
     this.#pointPresenter.clear();
+    this.#newPointPresenter.destroy();
 
     remove(this.#sortingComponent);
     remove(this.#menuComponent);

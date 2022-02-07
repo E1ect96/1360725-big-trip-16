@@ -74,23 +74,23 @@ export default class PointPresenter {
 
   #replaceCardToForm = () => {
     replace(this.#tripPointEditComponent, this.#tripPointComponent);
-    document.addEventListener('keydown', this.#EscKeyDownhandler);
+    document.addEventListener('keydown', this.#EscKeyDownHandler);
     this.#changeMode();
     this.#mode = Mode.EDITING;
   };
 
   #replaceFormToCard = () => {
     replace(this.#tripPointComponent, this.#tripPointEditComponent);
-    document.removeEventListener('keydown', this.#EscKeyDownhandler);
+    document.removeEventListener('keydown', this.#EscKeyDownHandler);
     this.#mode = Mode.DEFAULT;
   };
 
-  #EscKeyDownhandler = (evt) => {
+  #EscKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#tripPointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#EscKeyDownhandler);
+      document.removeEventListener('keydown', this.#EscKeyDownHandler);
     }
   };
 

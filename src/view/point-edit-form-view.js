@@ -6,22 +6,22 @@ import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createPointEditFormOptionsTemplate = (options) => (`
   ${(options.length !== 0) ? `
-  <section class="event__section  event__section--offers">
-        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-        <div class="event__available-offers">
-            ${options.map((option) => `
-                <div class="event__offer-selector">
-                    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.type}-${option.id}" type="checkbox" name="event-offer-${option.type}" ${option.isActive ? 'checked' : ''}>
-                    <label class="event__offer-label" for="event-offer-${option.type}-${option.id}">
-                        <span class="event__offer-title">${option.type}</span>
-                        &plus;&euro;&nbsp;
-                        <span class="event__offer-price">${option.price}</span>
-                    </label>
-                </div>
-            `).join('')}
-        </div>
-    </section>
-  ` : ''}
+    <section class="event__section  event__section--offers">
+          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+          <div class="event__available-offers">
+              ${options.map((option) => `
+                  <div class="event__offer-selector">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.type}-${option.id}" type="checkbox" name="event-offer-${option.type}" ${option.isActive ? 'checked' : ''}>
+                      <label class="event__offer-label" for="event-offer-${option.type}-${option.id}">
+                          <span class="event__offer-title">${option.type}</span>
+                          &plus;&euro;&nbsp;
+                          <span class="event__offer-price">${option.price}</span>
+                      </label>
+                  </div>
+              `).join('')}
+          </div>
+      </section>
+    ` : ''}
   `);
 
 const createPointEditFormTemplate = (data) => {
