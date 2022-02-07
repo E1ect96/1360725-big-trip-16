@@ -1,6 +1,7 @@
 import {tripDate, tripTime, durationEvent} from '../utils/utils';
 import AbstractView from './abstract-view';
 import he from 'he';
+import {convertDurationTime} from '../utils/convertor-time-duration';
 
 const createPointOptionsTemplate = (options) => (`
   ${options.map((option) => `
@@ -17,6 +18,7 @@ const createPointOptionsTemplate = (options) => (`
 const createTripPointTemplate = (tripPoint) => {
   const {type, time, price, additionalOptions, destinationInfo, isFavorite} = tripPoint;
   const optionsTemplate = createPointOptionsTemplate(additionalOptions);
+  const durationTripEvent = durationEvent(time.start, time.end);
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -31,7 +33,7 @@ const createTripPointTemplate = (tripPoint) => {
           &mdash;
           <time class="event__end-time" datetime="">${tripTime(time.end)}</time>
         </p>
-        <p class="event__duration">${durationEvent(time.start, time.end)}</p>
+        <p class="event__duration">${convertDurationTime(durationTripEvent)}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${price}</span>

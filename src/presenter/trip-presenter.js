@@ -5,7 +5,7 @@ import EmptyPointListView from '../view/empty-point-list-view';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './point-presenter';
 import {FilterType, SortType, UpdateType, UserAction} from '../utils/const';
-import {sortByPrice, sortByTime} from '../mock/trip-point';
+import {sortByPrice, sortByTime} from '../utils/utils';
 import {filter} from '../utils/filters';
 import NewPointPresenter from './new-point-presenter';
 
@@ -48,6 +48,8 @@ export default class TripPresenter {
         return filteredPoints.sort(sortByTime);
       case SortType.PRICE:
         return filteredPoints.sort(sortByPrice);
+      case SortType.DEFAULT:
+        return filteredPoints;
     }
 
     return filteredPoints;
