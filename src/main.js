@@ -16,6 +16,8 @@ const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
 export const tripPoints = Array.from({length: POINT_COUNT}, generateTripPoint);
 
+console.log('Референс', tripPoints);
+
 const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
 pointsModel.points = tripPoints;
 const filterModel = new FilterModel();

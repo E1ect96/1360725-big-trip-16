@@ -21,7 +21,7 @@ export default class ApiService {
     const response = await this.#load({
       url: `tasks/${point.id}`,
       method: Method.PUT,
-      body: JSON.stringify(point),
+      body: JSON.stringify(this.#adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
@@ -49,6 +49,27 @@ export default class ApiService {
     } catch (err) {
       ApiService.catchError(err);
     }
+  }
+
+  #adaptToServer = (point) => {
+    const adaptedTripPoint = {...point,
+
+      'date_from': point.time.start.toISOString(),
+      'date_to': point.time.end.toISOString(),
+      'base_price': point.price,
+      'offers': point.additionalOptions,
+      'destination': point.destinationInfo,
+      'is_favorite': point.isFavorite,
+    };
+
+    // Ненужные ключи мы удаляем
+    delete adaptedTripPoint.time;
+    delete adaptedTripPoint.price;
+    delete adaptedTripPoint.isFavorite;
+    delete adaptedTripPoint.additionalOptions;
+    delete adaptedTripPoint.destinationInfo;
+
+    return adaptedTripPoint;
   }
 
   static parseResponse = (response) => response.json();
