@@ -1,4 +1,3 @@
-import SiteMenuView from '../view/site-menu-view';
 import TripInfoView from '../view/trip-info-view';
 import SiteSortingView from '../view/site-sorting-view';
 import {remove, render, RenderPosition} from '../utils/render';
@@ -6,19 +5,16 @@ import EmptyPointListView from '../view/empty-point-list-view';
 import TripListView from '../view/trip-list-view';
 import PointPresenter from './point-presenter';
 import {FilterType, SortType, UpdateType, UserAction} from '../utils/const';
-import {sortByPrice, sortByTime} from '../mock/trip-point';
+import {sortByPrice, sortByTime} from '../utils/utils';
 import {filter} from '../utils/filters';
 import NewPointPresenter from './new-point-presenter';
 
 export default class TripPresenter {
-  #menuContainer = null;
-  #filterContainer = null;
   #tripInfoContainer = null;
   #tripContainer = null;
   #pointsModel = null;
   #filterModel = null;
 
-  #menuComponent = new SiteMenuView();
   #tripInfoComponent = new TripInfoView();
   #noPointsComponent = null;
   #tripListComponent = new TripListView();
@@ -29,18 +25,13 @@ export default class TripPresenter {
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.EVERYTHING;
 
-  constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer, pointsModel, filterModel) {
-    this.#menuContainer = menuContainer;
-    this.#filterContainer = filterContainer;
+  constructor(tripInfoContainer, tripContainer, pointsModel, filterModel) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
     this.#filterModel = filterModel;
 
     this.#newPointPresenter = new NewPointPresenter(this.#tripListComponent, this.#handleViewAction);
-
-    this.#pointsModel.addObserver(this.#handleModelEvent);
-    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get points() {
@@ -53,19 +44,32 @@ export default class TripPresenter {
         return filteredPoints.sort(sortByTime);
       case SortType.PRICE:
         return filteredPoints.sort(sortByPrice);
+      case SortType.DEFAULT:
+        return filteredPoints;
     }
 
     return filteredPoints;
   }
 
   init = () => {
+    this.#pointsModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
     this.#renderTrip();
   }
 
-  createTripPoint = () => {
+  destroy = () => {
+    this.#clearTrip(true);
+
+    remove(this.#tripListComponent);
+
+    this.#pointsModel.removeObserver(this.#handleModelEvent);
+    this.#filterModel.removeObserver(this.#handleModelEvent);
+  }
+
+
+  createTripPoint = (callback) => {
     this.#currentSortType = SortType.DEFAULT;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#newPointPresenter.init();
+    this.#newPointPresenter.init(callback);
   }
 
   #handleModeChange = () => {
@@ -101,10 +105,6 @@ export default class TripPresenter {
         this.#renderTrip();
         break;
     }
-  }
-
-  #renderMenu = () => {
-    render(this.#menuContainer, this.#menuComponent);
   }
 
   #renderTripInfo = () => {
@@ -156,7 +156,6 @@ export default class TripPresenter {
     this.#newPointPresenter.destroy();
 
     remove(this.#sortingComponent);
-    remove(this.#menuComponent);
     remove(this.#tripInfoComponent);
 
     if (this.#noPointsComponent) {
@@ -172,7 +171,6 @@ export default class TripPresenter {
     const points = this.points;
     const pointsCount = points.length;
 
-    this.#renderMenu();
     this.#renderTripInfo();
     this.#renderSorting();
     render (this.#tripContainer, this.#tripListComponent);

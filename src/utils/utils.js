@@ -8,8 +8,18 @@ export const tripTime = (date) => dayjs(date).format('HH:MM');
 export const isPointFuture = (dateStart) => dateStart && dayjs().isBefore(dateStart);
 export const isPointPast = (dateStart) => dateStart && dayjs().isAfter(dateStart);
 
+export const sortByPrice = (pointA, pointB) => (pointB.price - pointA.price);
+
+export const sortByTime = (pointA, pointB) => {
+  const diffA = dayjs(pointA.time.end).diff(dayjs(pointA.time.start));
+  const diffB = dayjs(pointB.time.end).diff(dayjs(pointB.time.start));
+  return diffB - diffA;
+};
+
+export const sortUpToDown = (a, b) => b[1] - a[1];
+
 dayjs.extend(duration);
-export const durationEvent = (startTime, endTime) => dayjs.duration(dayjs(endTime).diff(dayjs(startTime))).format('HH MM');
+export const durationEvent = (startTime, endTime) => dayjs(endTime).diff(dayjs(startTime), 'm');
 
 export const calculateTotalCost = (Points) => {
   let totalCost = 0;
@@ -41,3 +51,5 @@ export const defaultPoint = () => ({
   },
   isFavorite: false,
 });
+
+export const makeItemsUniq = (items) => [...new Set(items)];

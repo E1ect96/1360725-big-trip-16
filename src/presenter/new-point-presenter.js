@@ -7,13 +7,15 @@ export default class NewPointPresenter {
   #tripPointContainer = null;
   #changeData = null;
   #pointAddComponent = null;
+  #destroyCallback = null;
 
   constructor(tripPointContainer, changeData) {
     this.#tripPointContainer = tripPointContainer;
     this.#changeData = changeData;
   }
 
-  init = () => {
+  init = (callback) => {
+    this.#destroyCallback = callback;
     if (this.#pointAddComponent !== null) {
       return;
     }
@@ -32,6 +34,7 @@ export default class NewPointPresenter {
       return;
     }
 
+    this.#destroyCallback?.();
     remove(this.#pointAddComponent);
     this.#pointAddComponent = null;
 
