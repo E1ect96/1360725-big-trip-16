@@ -1,6 +1,6 @@
 import {calculateTotalCost} from '../utils/utils';
-import {tripPoints} from '../main';
 import AbstractView from './abstract-view';
+import PointsModel from '../model/points-model';
 
 const createTripInfoTemplate = () => (
   `<section class="trip-main__trip-info  trip-info">
@@ -10,7 +10,7 @@ const createTripInfoTemplate = () => (
     </div>
 
     <p class="trip-info__cost">
-      Total: &euro;&nbsp;<span class="trip-info__cost-value">${calculateTotalCost(tripPoints)}</span>
+      Total: &euro;&nbsp;<span class="trip-info__cost-value">${calculateTotalCost(PointsModel.points)}</span>
     </p>
   </section>`
 );

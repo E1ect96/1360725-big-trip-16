@@ -21,7 +21,7 @@ export const sortUpToDown = (a, b) => b[1] - a[1];
 dayjs.extend(duration);
 export const durationEvent = (startTime, endTime) => dayjs(endTime).diff(dayjs(startTime), 'm');
 
-export const calculateTotalCost = (Points) => {
+/*export const calculateTotalCost = (Points) => {
   let totalCost = 0;
   Points.forEach((element) => {
     totalCost = totalCost + element.price;
@@ -33,7 +33,9 @@ export const calculateTotalCost = (Points) => {
   });
 
   return totalCost;
-};
+};*/
+
+export const calculateTotalCost = () => 0;
 
 export const defaultPoint = () => ({
   id: 0,
