@@ -67,12 +67,12 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
-render(siteMenuElement, siteMenu);
-render(siteTripInfo, newEventButton, RenderPosition.BEFOREEND);
 tripPresenter.init();
 filterPresenter.init();
 
-siteMenu.setMenuNavigationClickHandler(handleSiteMenuClick);
-newEventButton.setNewEventClickHandler(handleSiteMenuClick);
-
-pointsModel.init();
+pointsModel.init().finally(() => {
+  render(siteMenuElement, siteMenu);
+  render(siteTripInfo, newEventButton, RenderPosition.BEFOREEND);
+  siteMenu.setMenuNavigationClickHandler(handleSiteMenuClick);
+  newEventButton.setNewEventClickHandler(handleSiteMenuClick);
+});
