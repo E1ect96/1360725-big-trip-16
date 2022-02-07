@@ -31,5 +31,5 @@ export const FilterType = {
 export const MenuItem = {
   TABLE: 'Table',
   STATS: 'Stats',
-  ADD_NEW_POINT: 'New event'
+  ADD_NEW_POINT: 'New event',
 };
