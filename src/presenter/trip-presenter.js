@@ -8,6 +8,7 @@ import {FilterType, SortType, UpdateType, UserAction} from '../utils/const';
 import {sortByPrice, sortByTime} from '../utils/utils';
 import {filter} from '../utils/filters';
 import NewPointPresenter from './new-point-presenter';
+import LoadingView from '../view/loading-view';
 
 export default class TripPresenter {
   #tripInfoContainer = null;
@@ -16,6 +17,7 @@ export default class TripPresenter {
   #filterModel = null;
 
   #tripInfoComponent = new TripInfoView();
+  #loadingComponent = new LoadingView();
   #noPointsComponent = null;
   #tripListComponent = new TripListView();
   #sortingComponent = null;
@@ -24,6 +26,7 @@ export default class TripPresenter {
   #newPointPresenter = null;
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.EVERYTHING;
+  #isLoading = true;
 
   constructor(tripInfoContainer, tripContainer, pointsModel, filterModel) {
     this.#tripInfoContainer = tripInfoContainer;
@@ -104,6 +107,11 @@ export default class TripPresenter {
         this.#clearTrip();
         this.#renderTrip();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.#renderTrip();
+        break;
     }
   }
 
@@ -128,6 +136,10 @@ export default class TripPresenter {
     this.#sortingComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
 
     render(this.#tripContainer, this.#sortingComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderLoading = () => {
+    render(this.#tripContainer, this.#loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   #renderNoPoints = () => {
@@ -168,6 +180,10 @@ export default class TripPresenter {
   }
 
   #renderTrip = () => {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     const points = this.points;
     const pointsCount = points.length;
 

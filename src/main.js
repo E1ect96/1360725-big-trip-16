@@ -1,4 +1,3 @@
-import {generateTripPoint} from './mock/trip-point.js';
 import TripPresenter from './presenter/trip-presenter';
 import PointsModel from './model/points-model';
 import FilterModel from './model/filter-model';
@@ -8,15 +7,10 @@ import ButtonAddEventView from './view/add-new-event-button-view';
 import {remove, render, RenderPosition} from './utils/render';
 import {MenuItem} from './utils/const';
 import StatisticsView from './view/stat-view';
+import ApiService from './api-service';
 
-const POINT_COUNT = 6;
-
-export const tripPoints = Array.from({length: POINT_COUNT}, generateTripPoint);
-
-const pointsModel = new PointsModel();
-pointsModel.points = tripPoints;
-const filterModel = new FilterModel();
-
+const AUTHORIZATION = 'Basic e1ect96';
+const END_POINT = 'https://16.ecmascript.pages.academy/big-trip';
 
 const siteBodyElement = document.querySelector('.page-body');
 const siteMenuElement = siteBodyElement.querySelector('.trip-controls__navigation');
@@ -24,12 +18,11 @@ const siteFilterElement = siteBodyElement.querySelector('.trip-controls__filters
 const siteTripInfo = siteBodyElement.querySelector('.trip-main');
 const siteTripEvents = siteBodyElement.querySelector('.trip-events');
 
+const pointsModel = new PointsModel(new ApiService(END_POINT, AUTHORIZATION));
+const filterModel = new FilterModel();
+
 const siteMenu = new SiteMenuView();
 const newEventButton = new ButtonAddEventView();
-
-render(siteMenuElement, siteMenu);
-render(siteTripInfo, newEventButton, RenderPosition.BEFOREEND);
-
 
 const tripPresenter = new TripPresenter(siteTripInfo, siteTripEvents, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteFilterElement, filterModel);
@@ -77,5 +70,9 @@ const handleSiteMenuClick = (menuItem) => {
 tripPresenter.init();
 filterPresenter.init();
 
-siteMenu.setMenuNavigationClickHandler(handleSiteMenuClick);
-newEventButton.setNewEventClickHandler(handleSiteMenuClick);
+pointsModel.init().finally(() => {
+  render(siteMenuElement, siteMenu);
+  render(siteTripInfo, newEventButton, RenderPosition.BEFOREEND);
+  siteMenu.setMenuNavigationClickHandler(handleSiteMenuClick);
+  newEventButton.setNewEventClickHandler(handleSiteMenuClick);
+});
