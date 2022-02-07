@@ -1,4 +1,3 @@
-import SiteMenuView from '../view/site-menu-view';
 import TripInfoView from '../view/trip-info-view';
 import SiteSortingView from '../view/site-sorting-view';
 import {remove, render, RenderPosition} from '../utils/render';
@@ -18,7 +17,6 @@ export default class TripPresenter {
   #pointsModel = null;
   #filterModel = null;
 
-  #menuComponent = new SiteMenuView();
   #tripInfoComponent = new TripInfoView();
   #noPointsComponent = null;
   #tripListComponent = new TripListView();
@@ -103,10 +101,6 @@ export default class TripPresenter {
     }
   }
 
-  #renderMenu = () => {
-    render(this.#menuContainer, this.#menuComponent);
-  }
-
   #renderTripInfo = () => {
     render(this.#tripInfoContainer, this.#tripInfoComponent, RenderPosition.AFTERBEGIN);
   }
@@ -156,7 +150,6 @@ export default class TripPresenter {
     this.#newPointPresenter.destroy();
 
     remove(this.#sortingComponent);
-    remove(this.#menuComponent);
     remove(this.#tripInfoComponent);
 
     if (this.#noPointsComponent) {
@@ -172,7 +165,6 @@ export default class TripPresenter {
     const points = this.points;
     const pointsCount = points.length;
 
-    this.#renderMenu();
     this.#renderTripInfo();
     this.#renderSorting();
     render (this.#tripContainer, this.#tripListComponent);
