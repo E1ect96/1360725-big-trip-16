@@ -52,12 +52,12 @@ const handleSiteMenuClick = (menuItem) => {
       // Убрать выделение с ADD NEW TASK после сохранения (эта логика прописана в createTask в trip-presenter)
       break;
     case MenuItem.TABLE:
-      // Показать фильтры
+      filterPresenter.init();
       tripPresenter.init();
       // Скрыть статистику
       break;
     case MenuItem.STATS:
-      // Скрыть фильтры
+      filterPresenter.destroy();
       tripPresenter.destroy();
       // Показать статистику
       break;
