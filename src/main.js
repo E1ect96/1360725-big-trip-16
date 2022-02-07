@@ -7,6 +7,7 @@ import SiteMenuView from './view/site-menu-view';
 import ButtonAddEventView from './view/add-new-event-button-view';
 import {render, RenderPosition} from './utils/render';
 import {MenuItem} from './utils/const';
+import StatisticsView from './view/stat-view';
 
 const POINT_COUNT = 6;
 
@@ -70,9 +71,4 @@ filterPresenter.init();
 siteMenu.setMenuNavigationClickHandler(handleSiteMenuClick);
 newEventButton.setNewEventClickHandler(handleSiteMenuClick);
 
-/*
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
-  evt.preventDefault();
-  tripPresenter.createTripPoint();
-});
-*/
+render(siteTripEvents, new StatisticsView(pointsModel.points), RenderPosition.BEFOREEND);
