@@ -61,7 +61,7 @@ const generateRandomDescription = () => {
 
   let description = '';
   for (let i = 0; i < getRandomInteger(1,5); i++) {
-    description = `${description + descriptions[getRandomInteger(0, descriptions.length)]  } `;
+    description = `${description + descriptions[getRandomInteger(0, descriptions.length - 1)]  } `;
   }
   return description;
 };
@@ -82,8 +82,8 @@ const generateRandomPrice = () => (
 );
 
 const tossACoin = () => {
-  const coinResult = [true, false];
-  return coinResult[getRandomInteger(0, 1)];
+  const coinResults = [true, false];
+  return coinResults[getRandomInteger(0, 1)];
 };
 
 const generateAdditionalOption = () => ({

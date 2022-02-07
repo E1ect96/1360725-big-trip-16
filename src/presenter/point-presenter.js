@@ -1,8 +1,7 @@
 import TripPointView from '../view/trip-point-view';
 import PointEditFormView from '../view/point-edit-form-view';
 import {remove, render, replace} from '../utils/render';
-import OptionPresenter from './OptionPresenter';
-import OptionEditPresenter from './OptionEditPresenter';
+import {UpdateType, UserAction} from '../utils/const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -13,8 +12,6 @@ export default class PointPresenter {
   #tripPointContainer = null;
   #changeData = null;
   #changeMode = null;
-  #tripAdditionOptionsContainer = null;
-  #tripAdditionOptionsEditContainer = null;
   #tripPointComponent = null;
   #tripPointEditComponent = null;
 
@@ -38,17 +35,13 @@ export default class PointPresenter {
     this.#tripPointComponent = new TripPointView(point);
     this.#tripPointEditComponent = new PointEditFormView(point);
 
-    this.#tripAdditionOptionsContainer = this.#tripPointComponent.element.querySelector('.event__selected-offers');
-    this.#renderPointOptions();
-    this.#tripAdditionOptionsEditContainer = this.#tripPointEditComponent.element.querySelector('.event__available-offers');
-    this.#renderEditPointOptions();
-
     this.#tripPointComponent.setEditClickHandler(this.#handleCardEditClick);
     this.#tripPointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
     this.#tripPointEditComponent.setEditClickHandler(this.#handleFormEditClick);
     this.#tripPointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#tripPointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
+    /*    this.#tripPointEditComponent.setOptionClickHandler(this.#handleOptionClick);*/
 
     if (prevTripPointComponent === null || prevTripPointEditComponent === null) {
       render(this.#tripPointContainer, this.#tripPointComponent);
@@ -81,23 +74,23 @@ export default class PointPresenter {
 
   #replaceCardToForm = () => {
     replace(this.#tripPointEditComponent, this.#tripPointComponent);
-    document.addEventListener('keydown', this.#onEscKeyDownHandler);
+    document.addEventListener('keydown', this.#EscKeyDownHandler);
     this.#changeMode();
     this.#mode = Mode.EDITING;
   };
 
   #replaceFormToCard = () => {
     replace(this.#tripPointComponent, this.#tripPointEditComponent);
-    document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+    document.removeEventListener('keydown', this.#EscKeyDownHandler);
     this.#mode = Mode.DEFAULT;
   };
 
-  #onEscKeyDownHandler = (evt) => {
+  #EscKeyDownHandler = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#tripPointEditComponent.reset(this.#point);
       this.#replaceFormToCard();
-      document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+      document.removeEventListener('keydown', this.#EscKeyDownHandler);
     }
   };
 
@@ -106,43 +99,36 @@ export default class PointPresenter {
   }
 
   #handleFormEditClick = () => {
+    this.#tripPointEditComponent.reset(this.#point);
     this.#replaceFormToCard();
   }
 
   #handleFormSubmit = (point) => {
-    this.#changeData(point);
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MAJOR,
+      point,
+    );
     this.#replaceFormToCard();
   }
 
-  #handleDeleteClick = () => {
-    this.destroy();
+  #handleDeleteClick = (point) => {
+    this.#changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   }
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      {...this.#point, isFavorite: !this.#point.isFavorite},
+    );
   }
 
-  #renderPointOption = (option) => {
-    if (option.isActive) {
-      const optionPresenter = new OptionPresenter(this.#tripAdditionOptionsContainer);
-      optionPresenter.init(option);
-    }
-  }
+  #handleOptionClick = () => {
 
-  #renderPointOptions = () => {
-    this.#options.forEach((option) => this.#renderPointOption(option));
-  }
-
-  #renderEditPointOption = (option) => {
-    const optionEditPresenter = new OptionEditPresenter(this.#tripAdditionOptionsEditContainer);
-    optionEditPresenter.init(option);
-  }
-
-  #renderEditPointOptions = () => {
-    if (this.#options.length === 0) {
-      this.#tripPointEditComponent.element.querySelector('.event__section--offers').classList.add('visually-hidden');
-    } else {
-      this.#options.forEach((option) => this.#renderEditPointOption(option));
-    }
   }
 }

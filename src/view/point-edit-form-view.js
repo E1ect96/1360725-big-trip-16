@@ -1,8 +1,33 @@
 import {tripFullDate} from '../utils/utils';
 import SmartView from './smart-view';
+import flatpickr from 'flatpickr';
+
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import he from 'he';
+
+const createPointEditFormOptionsTemplate = (options) => (`
+  ${(options.length !== 0) ? `
+    <section class="event__section  event__section--offers">
+          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+          <div class="event__available-offers">
+              ${options.map((option) => `
+                  <div class="event__offer-selector">
+                      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${option.type}-${option.id}" type="checkbox" name="event-offer-${option.type}" ${option.isActive ? 'checked' : ''}>
+                      <label class="event__offer-label" for="event-offer-${option.type}-${option.id}">
+                          <span class="event__offer-title">${option.type}</span>
+                          &plus;&euro;&nbsp;
+                          <span class="event__offer-price">${option.price}</span>
+                      </label>
+                  </div>
+              `).join('')}
+          </div>
+      </section>
+    ` : ''}
+  `);
 
 const createPointEditFormTemplate = (data) => {
-  const {type, time, price, destinationInfo} = data;
+  const {type, time, price, additionalOptions, destinationInfo} = data;
+  const optionsTemplate = createPointEditFormOptionsTemplate(additionalOptions);
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -70,7 +95,7 @@ const createPointEditFormTemplate = (data) => {
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type  }
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationInfo.name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destinationInfo.name)}" list="destination-list-1">
           <datalist id="destination-list-1">
             <option value="Berlin"></option>
             <option value="Moscow"></option>
@@ -95,7 +120,7 @@ const createPointEditFormTemplate = (data) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+          <input class="event__input  event__input--price" id="event-price-1" required pattern="[0-9]+" type="text" name="event-price" value="${price}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -105,14 +130,7 @@ const createPointEditFormTemplate = (data) => {
         </button>
       </header>
       <section class="event__details">
-        <section class="event__section  event__section--offers">
-          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-          <div class="event__available-offers">
-
-          </div>
-        </section>
-
+        ${optionsTemplate}
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${destinationInfo.description}</p>
@@ -123,16 +141,32 @@ const createPointEditFormTemplate = (data) => {
 };
 
 export default class PointEditFormView extends SmartView {
+  #datepickerStart = null;
+  #datepickerEnd = null;
 
   constructor(tripPoint) {
     super();
     this._data = PointEditFormView.parsePointToData(tripPoint);
 
     this.#setInnerHandlers();
+    this.#setDatepickers();
   }
 
   get template() {
     return createPointEditFormTemplate(this._data);
+  }
+
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#datepickerStart) {
+      this.#datepickerStart.destroy();
+      this.#datepickerStart = null;
+    }
+    if (this.#datepickerEnd) {
+      this.#datepickerEnd.destroy();
+      this.#datepickerEnd = null;
+    }
   }
 
   reset = (point) => {
@@ -144,6 +178,46 @@ export default class PointEditFormView extends SmartView {
   restoreHandlers = () => {
     this.#setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.#setDatepickers();
+  }
+
+  #setDatepickers = () => {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._data.time.start,
+        enableTime: true,
+        'time_24hr': true,
+        onClose: this.#startDateChangeHandler,
+      },
+    );
+    this.#datepickerEnd = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        dateFormat: 'd/m/y H:i',
+        defaultDate: this._data.time.end,
+        enableTime: true,
+        'time_24hr': true,
+        onClose: this.#endDateChangeHandler,
+      },
+    );
+  }
+
+  #startDateChangeHandler = ([userDate]) => {
+    this.updateData({
+      time: {
+        start: userDate,
+      },
+    }, true);
+  }
+
+  #endDateChangeHandler = ([userDate]) => {
+    this.updateData({
+      time: {
+        end: userDate,
+      },
+    }, true);
   }
 
   #setInnerHandlers = () => {
@@ -152,7 +226,7 @@ export default class PointEditFormView extends SmartView {
     this.element.querySelector('.event__input--destination')
       .addEventListener('input', this.#destinationInputHandler );
     this.element.querySelector('.event__input--price')
-      .addEventListener('input', this.#destinationInputHandler );
+      .addEventListener('input', this.#priceInputHandler );
   }
 
   #typeChangeHandler = (evt) => {
@@ -188,15 +262,33 @@ export default class PointEditFormView extends SmartView {
 
   #deleteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.deleteClick();
+    this._callback.deleteClick(PointEditFormView.parseDataToPoint(this._data));
   }
 
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
     this.updateData({
-      destination: evt.target.value,
+      destinationInfo:
+        {name : evt.target.value,},
     }, true);
   }
+
+  #priceInputHandler = (evt) => {
+    evt.preventDefault();
+    this.updateData({
+      price: evt.target.value,
+    }, true);
+  }
+
+  /*  setOptionClickHandler = (callback) => {
+    this._callback.optionClick = callback;
+    this.element.querySelector('.event__offer-label').addEventListener('click', this.#optionClickHandler);
+  }
+
+  #optionClickHandler = (evt) => {
+    evt.preventDefault();
+    this.element.isActive = evt.target.checked;
+  }*/
 
   static parsePointToData = (point) => ({...point});
 

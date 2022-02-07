@@ -1,8 +1,22 @@
 import {tripDate, tripTime, durationEvent} from '../utils/utils';
 import AbstractView from './abstract-view';
+import he from 'he';
+
+const createPointOptionsTemplate = (options) => (`
+  ${options.map((option) => `
+    ${(option.isActive) ? `
+      <li class="event__offer">
+        <span class="event__offer-title">${option.type}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${option.price}</span>
+    </li>
+    ` : ''}
+  `).join('')}
+`);
 
 const createTripPointTemplate = (tripPoint) => {
-  const {type, time, price, destinationInfo, isFavorite} = tripPoint;
+  const {type, time, price, additionalOptions, destinationInfo, isFavorite} = tripPoint;
+  const optionsTemplate = createPointOptionsTemplate(additionalOptions);
 
   return `<li class="trip-events__item">
     <div class="event">
@@ -10,12 +24,12 @@ const createTripPointTemplate = (tripPoint) => {
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
       </div>
-      <h3 class="event__title">${`${type  } ${  destinationInfo.name}`}</h3>
+      <h3 class="event__title">${`${type  } ${he.encode(destinationInfo.name)}`}</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">${tripTime(time.start)}</time>
+          <time class="event__start-time" datetime="">${tripTime(time.start)}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">${tripTime(time.end)}</time>
+          <time class="event__end-time" datetime="">${tripTime(time.end)}</time>
         </p>
         <p class="event__duration">${durationEvent(time.start, time.end)}</p>
       </div>
@@ -24,7 +38,7 @@ const createTripPointTemplate = (tripPoint) => {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-
+        ${optionsTemplate}
       </ul>
       <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
         <span class="visually-hidden">Add to favorite</span>
