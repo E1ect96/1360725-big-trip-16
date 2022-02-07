@@ -10,8 +10,6 @@ import {filter} from '../utils/filters';
 import NewPointPresenter from './new-point-presenter';
 
 export default class TripPresenter {
-  #menuContainer = null;
-  #filterContainer = null;
   #tripInfoContainer = null;
   #tripContainer = null;
   #pointsModel = null;
@@ -27,9 +25,7 @@ export default class TripPresenter {
   #currentSortType = SortType.DEFAULT;
   #filterType = FilterType.EVERYTHING;
 
-  constructor(menuContainer, filterContainer, tripInfoContainer, tripContainer, pointsModel, filterModel) {
-    this.#menuContainer = menuContainer;
-    this.#filterContainer = filterContainer;
+  constructor(tripInfoContainer, tripContainer, pointsModel, filterModel) {
     this.#tripInfoContainer = tripInfoContainer;
     this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;

@@ -285,6 +285,29 @@ export default class StatisticsView extends SmartView {
     return createStatisticsViewTemplate();
   }
 
+  removeElement = () => {
+    super.removeElement();
+
+    if (this.#moneyChart) {
+      this.#moneyChart.destroy();
+      this.#moneyChart = null;
+    }
+
+    if (this.#typeChart) {
+      this.#typeChart.destroy();
+      this.#typeChart = null;
+    }
+
+    if (this.#timeChart) {
+      this.#timeChart.destroy();
+      this.#timeChart = null;
+    }
+  };
+
+  restoreHandlers = () => {
+    this.#setCharts();
+  };
+
   #setCharts = () => {
     const points = this._data;
     const moneyCtx = this.element.querySelector('#money');
@@ -299,5 +322,4 @@ export default class StatisticsView extends SmartView {
     this.#timeChart = renderTimeChart(timeCtx, points);
     this.#typeChart = renderTypeChat(typeCtx, points);
   };
-
 }

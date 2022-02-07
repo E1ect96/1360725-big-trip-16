@@ -5,7 +5,7 @@ import FilterModel from './model/filter-model';
 import FilterPresenter from './presenter/filter-presenter';
 import SiteMenuView from './view/site-menu-view';
 import ButtonAddEventView from './view/add-new-event-button-view';
-import {render, RenderPosition} from './utils/render';
+import {remove, render, RenderPosition} from './utils/render';
 import {MenuItem} from './utils/const';
 import StatisticsView from './view/stat-view';
 
@@ -31,36 +31,45 @@ render(siteMenuElement, siteMenu);
 render(siteTripInfo, newEventButton, RenderPosition.BEFOREEND);
 
 
-const tripPresenter = new TripPresenter(siteMenuElement, siteFilterElement, siteTripInfo, siteTripEvents, pointsModel, filterModel);
+const tripPresenter = new TripPresenter(siteTripInfo, siteTripEvents, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteFilterElement, filterModel);
 
 const handleNewEventFormClose = () => {
   newEventButton.element.disabled = false;
 };
 
+let statisticsComponent = null;
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
       // Скрыть статистику
+      remove(statisticsComponent);
       // Показать фильтры
+      filterPresenter.destroy();
+      filterPresenter.init();
+      // Показать eventbox
       tripPresenter.destroy();
       tripPresenter.init();
-      // Показать eventbox
       // Показать форму добавления новой задачи
       tripPresenter.createTripPoint(handleNewEventFormClose);
-      // Заблокировать конопку добавления
+      // Заблокировать конопки добавления
       newEventButton.setMenuItem();
-      // Убрать выделение с ADD NEW TASK после сохранения (эта логика прописана в createTask в trip-presenter)
       break;
     case MenuItem.TABLE:
+      filterPresenter.destroy();
       filterPresenter.init();
+      tripPresenter.destroy();
       tripPresenter.init();
       // Скрыть статистику
+      remove(statisticsComponent);
       break;
     case MenuItem.STATS:
       filterPresenter.destroy();
       tripPresenter.destroy();
-      // Показать статистику
+      remove(statisticsComponent);
+      statisticsComponent = new StatisticsView(pointsModel.points);
+      render(siteTripEvents, new StatisticsView(pointsModel.points));
       break;
   }
 };
@@ -70,5 +79,3 @@ filterPresenter.init();
 
 siteMenu.setMenuNavigationClickHandler(handleSiteMenuClick);
 newEventButton.setNewEventClickHandler(handleSiteMenuClick);
-
-render(siteTripEvents, new StatisticsView(pointsModel.points), RenderPosition.BEFOREEND);
