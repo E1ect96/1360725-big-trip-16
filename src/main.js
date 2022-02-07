@@ -33,14 +33,21 @@ render(siteTripInfo, newEventButton, RenderPosition.BEFOREEND);
 const tripPresenter = new TripPresenter(siteMenuElement, siteFilterElement, siteTripInfo, siteTripEvents, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(siteFilterElement, filterModel);
 
+const handleNewEventFormClose = () => {
+  newEventButton.element.disabled = false;
+};
+
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.ADD_NEW_POINT:
       // Скрыть статистику
       // Показать фильтры
-      // Показать доску
+      // Показать eventbox
       // Показать форму добавления новой задачи
-      // Убрать выделение с ADD NEW TASK после сохранения
+      tripPresenter.createTripPoint(handleNewEventFormClose);
+      // Заблокировать конопку добавления
+      newEventButton.setMenuItem();
+      // Убрать выделение с ADD NEW TASK после сохранения (эта логика прописана в createTask в trip-presenter)
       break;
     case MenuItem.TASKS:
       // Показать фильтры

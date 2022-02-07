@@ -60,10 +60,10 @@ export default class TripPresenter {
     this.#renderTrip();
   }
 
-  createTripPoint = () => {
+  createTripPoint = (callback) => {
     this.#currentSortType = SortType.DEFAULT;
     this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this.#newPointPresenter.init();
+    this.#newPointPresenter.init(callback);
   }
 
   #handleModeChange = () => {
